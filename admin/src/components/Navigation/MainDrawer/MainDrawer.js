@@ -51,7 +51,7 @@ const ResponsiveDrawer = props => {
         <NavLink to="/" className="drawer__title">
           {/* <img height="50" src={logo} alt="logo" /> */}
           <Typography variant="h6" color="inherit">
-            IAFCJ
+            Astradev
           </Typography>
         </NavLink>
       </div>

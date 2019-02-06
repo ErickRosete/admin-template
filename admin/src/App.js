@@ -40,7 +40,7 @@ class App extends Component {
   state = {
     token: null,
     userId: null,
-    title: "IAFCJ"
+    title: "Astradev"
   };
 
   login = (token, userId, tokenExpiration) => {
