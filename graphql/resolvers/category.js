@@ -13,6 +13,14 @@ module.exports = {
       throw err;
     }
   },
+  category: async (args, req) => {
+    try {
+      const category = await Category.findById(args.id);
+      return transformCategory(category);
+    } catch (err) {
+      throw err;
+    }
+  },
 
   createCategory: async (args, req) => {
     // if (!req.isAuth) {
@@ -26,6 +34,15 @@ module.exports = {
     try {
       const result = await category.save();
       return transformCategory(result);
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  deleteCategory: async (args, req) => {
+    try {
+      const category = await Category.findByIdAndDelete(args.id);
+      return transformCategory(category);
     } catch (err) {
       throw err;
     }

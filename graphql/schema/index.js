@@ -30,13 +30,16 @@ input ProductInput{
 
 type RootQuery {
     categories: [Category!]!
+    category(id: String): Category
     products: [Product!]!
-    category(id: String): [Category]
+    product(id: String): Product
 }
 
 type RootMutation {
     createCategory(categoryInput: CategoryInput): Category
+    deleteCategory(id: String): Category
     createProduct(productInput: ProductInput): Product
+    deleteProduct(id: String): Category
 }
 
 schema {
