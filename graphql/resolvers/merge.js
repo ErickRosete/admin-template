@@ -33,7 +33,7 @@ const getProducts = async productIds => {
 const transformCategory = category => {
     return {
         ...category._doc,
-        product: getProducts.bind(this, product.categories)
+        products: getProducts.bind(this, category.products)
 
     };
 };

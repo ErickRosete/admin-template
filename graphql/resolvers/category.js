@@ -5,7 +5,7 @@ const { transformCategory } = require("./merge");
 module.exports = {
   categories: async () => {
     try {
-      categories = await Category.find();
+      const categories = await Category.find();
       return categories.map(category => {
         return transformCategory(category);
       });
@@ -19,7 +19,7 @@ module.exports = {
     //   throw new Error("Unauthenticated");
     // }
     const category = Category({
-      title: args.categoryInput.title,
+      name: args.categoryInput.name,
       description: args.categoryInput.description,
     });
 

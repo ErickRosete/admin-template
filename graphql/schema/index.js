@@ -5,7 +5,7 @@ type Category {
     _id: ID!
     name: String!
     description: String
-    products: [Product]!
+    products: [Product]
 }
 
 input CategoryInput{
@@ -19,7 +19,7 @@ type Product {
     name: String!
     description: String!
     quantity: Int
-    categories: [Category]!
+    categories: [Category]
 }
 
 input ProductInput{
@@ -31,6 +31,7 @@ input ProductInput{
 type RootQuery {
     categories: [Category!]!
     products: [Product!]!
+    category(id: String): [Category]
 }
 
 type RootMutation {
