@@ -1,52 +1,68 @@
-// const Event = require("../../models/event");
-// const User = require("../../models/user");
+const Product = require("../../models/product");
+const Category = require("../../models/category");
+
 // const { dateToString } = require("../../helpers/date");
 
-// const transformEvent = event => {
-//   return {
-//     ...event._doc,
-//     date: dateToString(event._doc.date)
-//   };
-// };
+const transformProduct = product => {
+    return {
+        ...product._doc,
+        categories: getCategories.bind(this, product.categories)
+    };
+};
 
-// const transformUser = user => {
-//   return {
-//     ...user._doc,
-//     password: null
-//   };
-// };
+const getProduct = async productId => {
+    try {
+        const product = await Product.findById(productId);
+        return transformProduct(product);
+    } catch (err) {
+        throw err;
+    }
+};
 
-// const getUser = async userId => {
-//   try {
-//     const user = await User.findById(userId);
-//     return transformUser(user);
-//   } catch (err) {
-//     throw err;
-//   }
-// };
+const getProducts = async productIds => {
+    try {
+        const products = await Product.find({ _id: { $in: productIds } });
+        return products.map(product => {
+            return transformProduct(product);
+        });
+    } catch (err) {
+        throw err;
+    }
+};
 
-// const getEvent = async eventId => {
-//   try {
-//     const event = await Event.findById(eventId);
-//     return transformEvent(event);
-//   } catch (err) {
-//     throw err;
-//   }
-// };
+const transformCategory = category => {
+    return {
+        ...category._doc,
+        product: getProducts.bind(this, product.categories)
 
-// const getEvents = async eventIds => {
-//   try {
-//     const events = await Event.find({ _id: { $in: eventIds } });
-//     return events.map(event => {
-//       return transformEvent(event);
-//     });
-//   } catch (err) {
-//     throw err;
-//   }
-// };
+    };
+};
 
-// exports.getEvent = getEvent;
-// exports.getEvents = getEvents;
-// exports.getUser = getUser;
-// exports.transformEvent = transformEvent;
-// exports.transformUser = transformUser;
+const getCategory = async categoryId => {
+    try {
+        const category = await Category.findById(categoryId);
+        return transformCategory(category);
+    } catch (err) {
+        throw err;
+    }
+};
+
+const getCategories = async categoryIds => {
+    try {
+        const categories = await Category.find({ _id: { $in: categoryIds } });
+        return categories.map(category => {
+            return transformCategory(category);
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
+exports.getProduct = getProduct;
+exports.getProducts = getProducts;
+
+exports.getCategories = getCategories;
+exports.getCategory = getCategory;
+
+exports.transformProduct = transformProduct;
+exports.transformCategory = transformCategory;

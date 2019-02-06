@@ -1,7 +1,9 @@
-// const eventResolver = require("./events");
+const categoryResolver = require("./category");
+const productResolver = require("./product");
 
 const rootResolver = {
-    // ...eventResolver,
+    ...categoryResolver,
+    ...productResolver
 }
 
 module.exports = rootResolver;
