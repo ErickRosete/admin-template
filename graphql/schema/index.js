@@ -1,21 +1,6 @@
 const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
-    type Address {
-        _id: ID!
-        street: String!
-        exteriorNumber: Int!
-        city: String
-        postalCode: Int
-    }
-  
-    input AddressInput{
-        street: String!
-        exteriorNumber: Int!
-        city: String
-        postalCode: Int
-    }
-  
     type BlogEntry {
         _id: ID!
         title: String!
@@ -76,7 +61,6 @@ module.exports = buildSchema(`
     }
 
     type RootQuery {
-        addresses: [Address!]!
 
         blog: [BlogEntry!]!
         blogEntry(id: ID!): BlogEntry!
@@ -92,7 +76,6 @@ module.exports = buildSchema(`
     }
 
     type RootMutation {
-        createAddress(addressInput: AddressInput): Address
         createBlogEntry(blogEntryInput: BlogEntryInput): BlogEntry
         createCategory(categoryInput: CategoryInput): Category
         deleteCategory(id: ID!): Category
