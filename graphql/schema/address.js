@@ -17,11 +17,6 @@ const AddressDef = `
         }
 `;
 
-
-// type RootMutation {
-
-// createAddress(addressInput: AddressInput): Address
-// }
 const AddressQuery = `
     addresses: [Address!]!
     address(id: ID!): Address!
