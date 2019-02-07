@@ -26,6 +26,7 @@ const blogEntryQuery = `
 
 const blogEntryMutation = `
     createBlogEntry(blogEntryInput: BlogEntryInput): BlogEntry
+    deleteBlogEntry(id: ID!): BlogEntry
 `;
 
 exports.blogEntryDef = blogEntryDef;

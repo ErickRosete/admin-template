@@ -15,7 +15,7 @@ module.exports = {
 
     blogEntry: async (args) => {
         try {
-            const blogEntry = await blogEntry.findById(args.id);
+            const blogEntry = await BlogEntry.findById(args.id);
             return transformBlogEntry(blogEntry);
         } catch (err) {
             throw err;

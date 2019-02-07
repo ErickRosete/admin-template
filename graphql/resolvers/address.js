@@ -8,7 +8,7 @@ module.exports = {
             });
         } catch (err) {
             throw err;
-        }
+        }   
     },
     address: async (args, req) => {
         try {
