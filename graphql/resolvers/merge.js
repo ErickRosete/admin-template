@@ -1,6 +1,7 @@
 const Product = require("../../models/product");
 const Category = require("../../models/category");
 const Subcategory = require("../../models/subcategory");
+const BlogEntry = require("../../models/blog-entry");
 
 // const { dateToString } = require("../../helpers/date");
 
@@ -91,6 +92,26 @@ const transformBlogEntry = blogEntry => {
     };
 };
 
+const getBlogEntry = async id => {
+    try {
+        const blogEntry = await BlogEntry.findById(id);
+        return transformBlogEntry(blogEntry);
+    } catch (err) {
+        throw err;
+    }
+};
+
+const getBlogEntries = async ids => {
+    try {
+        const blogEntries = await BlogEntry.find({ _id: { $in: ids } });
+        return blogEntries.map(BlogEntry => {
+            return transformBlogEntry(BlogEntry);
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
 exports.transformProduct = transformProduct;
 exports.getProduct = getProduct;
 exports.getProducts = getProducts;
@@ -104,3 +125,5 @@ exports.getSubcategories = getSubcategories;
 exports.getSubcategory = getSubcategory;
 
 exports.transformBlogEntry = transformBlogEntry;
+exports.getBlogEntries = getBlogEntries;
+exports.getBlogEntry = getBlogEntry;
