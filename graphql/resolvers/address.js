@@ -10,6 +10,7 @@ module.exports = {
             throw err;
         }   
     },
+    
     address: async (args, req) => {
         try {
             const address = await Address.findById(args.id);
@@ -18,6 +19,7 @@ module.exports = {
             throw err;
         }
     },
+
     createAddress: async (args, req) => {
         console.log(args)
         const address = Address({
@@ -34,4 +36,25 @@ module.exports = {
             throw err;
         }
     },
+
+    updateAddress: async (args) => {
+        try {
+            const address = await Address.findByIdAndUpdate(args.id,
+                { ...args.addressInput },
+                { new: true });
+            // return transformBlogEntry(blogEntry);
+            return { ...address._doc };
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    deleteAddress: async (args) => {
+        try {
+            const address = await Address.findByIdAndDelete(args.id);
+            return { ...address._doc };
+        } catch (err) {
+            throw err;
+        }
+    }
 };

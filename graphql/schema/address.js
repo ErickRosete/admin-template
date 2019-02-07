@@ -9,11 +9,11 @@ const AddressDef = `
         }
 
         input AddressInput{
-            street: String!
-            exteriorNumber: Int!
-            city: String!
-            country: String!
-            zipCode: Int!
+            street: String
+            exteriorNumber: Int
+            city: String
+            country: String
+            zipCode: Int
         }
 `;
 
@@ -24,6 +24,8 @@ const AddressQuery = `
 
 const AddressMutation = `
     createAddress(addressInput: AddressInput): Address
+    updateAddress(id: ID!,addressInput: AddressInput): Address
+    deleteAddress(id: ID!): Address
 `;
 
 exports.AddressDef = AddressDef;
