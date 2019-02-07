@@ -39,6 +39,17 @@ module.exports = {
         }
     },
 
+    updateProduct: async (args) => {
+        try {
+            const product = await Product.findByIdAndUpdate(args.id,
+                { ...args.productInput },
+                { new: true });
+            return transformProduct(product);
+        } catch (err) {
+            throw err;
+        }
+    },
+
     deleteProduct: async (args) => {
         try {
             const product = await Product.findByIdAndDelete(args.id);

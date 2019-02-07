@@ -19,7 +19,8 @@ const categoryQuery = `
 `;
 
 const categoryMutation = `
-    createCategory(categoryInput: CategoryInput): Category
+    createCategory(categoryInput: CategoryInput!): Category
+    updateCategory(id: ID!, categoryInput: CategoryInput!): Category
     deleteCategory(id: ID!): Category
 `;
 

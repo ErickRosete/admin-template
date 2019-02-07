@@ -19,7 +19,8 @@ const productQuery = `
 `;
 
 const productMutation = `
-    createProduct(productInput: ProductInput): Product
+    createProduct(productInput: ProductInput!): Product
+    updateProduct(id: ID!, productInput: ProductInput!): Product
     deleteProduct(id: ID!): Product
 `;
 

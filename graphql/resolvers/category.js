@@ -38,6 +38,17 @@ module.exports = {
     }
   },
 
+  updateCategory: async (args) => {
+    try {
+      const category = await Category.findByIdAndUpdate(args.id,
+        { ...args.categoryInput },
+        { new: true });
+      return transformCategory(category);
+    } catch (err) {
+      throw err;
+    }
+  },
+
   deleteCategory: async (args, req) => {
     try {
       const category = await Category.findByIdAndDelete(args.id);
