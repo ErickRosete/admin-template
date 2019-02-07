@@ -1,25 +1,8 @@
 const { buildSchema } = require("graphql");
+const { blogEntryDef, blogEntryQuery, blogEntryMutation } = require("./blog-entry");
 
 module.exports = buildSchema(`
-    type BlogEntry {
-        _id: ID!
-        title: String!
-        imageLink: String
-        subtitle: String
-        shortDescription: String
-        description: String!
-        createdAt: String!
-        updatedAt: String!
-    }
-
-    input BlogEntryInput{
-        title: String!
-        imageLink: String
-        subtitle: String
-        shortDescription: String
-        description: String!
-    }
-
+    ${blogEntryDef}
     type Category {
         _id: ID!
         name: String!
@@ -61,9 +44,7 @@ module.exports = buildSchema(`
     }
 
     type RootQuery {
-
-        blog: [BlogEntry!]!
-        blogEntry(id: ID!): BlogEntry!
+        ${blogEntryQuery}
 
         categories: [Category!]!
         category(id: ID!): Category!
@@ -76,7 +57,8 @@ module.exports = buildSchema(`
     }
 
     type RootMutation {
-        createBlogEntry(blogEntryInput: BlogEntryInput): BlogEntry
+        ${blogEntryMutation}
+        
         createCategory(categoryInput: CategoryInput): Category
         deleteCategory(id: ID!): Category
         createSubategory(subcategoryInput: SubcategoryInput): Subcategory

@@ -1,21 +1,21 @@
-type Address{
-    _id: ID!
-    street: String!
-    exteriorNumber: Int!
-    city: String!
-    country: String!
-    zipCode: Int!
-}
+// type Address{
+//     _id: ID!
+//     street: String!
+//     exteriorNumber: Int!
+//     city: String!
+//     country: String!
+//     zipCode: Int!
+// }
 
-input AddressInput{
-    street: String!
-    exteriorNumber: Int!
-    city: String!
-    country: String!
-    zipCode: Int!
-}
+// input AddressInput{
+//     street: String!
+//     exteriorNumber: Int!
+//     city: String!
+//     country: String!
+//     zipCode: Int!
+// }
 
-type RootMutation {
+// type RootMutation {
 
-createAddress(addressInput: AddressInput): Address
-}
+// createAddress(addressInput: AddressInput): Address
+// }
