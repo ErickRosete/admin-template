@@ -39,6 +39,17 @@ module.exports = {
     }
   },
 
+  updateSubcategory: async (args) => {
+    try {
+      const subcategory = await Subcategory.findByIdAndUpdate(args.id,
+        { ...args.subcategoryInput },
+        { new: true });
+      return transformSubcategory(subcategory);
+    } catch (err) {
+      throw err;
+    }
+  },
+
   deleteSubcategory: async (args, req) => {
     try {
       const subcategory = await Subcategory.findByIdAndDelete(args.id);

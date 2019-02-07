@@ -1,12 +1,11 @@
 const BlogEntry = require("../../models/blog-entry");
-const { transformBlogEntry } = require("./merge");
 
 module.exports = {
     blog: async () => {
         try {
             const blog = await BlogEntry.find();
             return blog.map(blogEntry => {
-                return transformBlogEntry(blogEntry);
+                return { ...blogEntry._doc };
             });
         } catch (err) {
             throw err;
@@ -16,7 +15,7 @@ module.exports = {
     blogEntry: async (args) => {
         try {
             const blogEntry = await BlogEntry.findById(args.id);
-            return transformBlogEntry(blogEntry);
+            return { ...blogEntry._doc };
         } catch (err) {
             throw err;
         }
@@ -31,18 +30,18 @@ module.exports = {
         });
         try {
             const result = await blogEntry.save();
-            return transformBlogEntry(result);
+            return { ...result._doc };
         } catch (err) {
             throw err;
         }
     },
 
-    editBlogEntry: async (args) => {
+    updateBlogEntry: async (args) => {
         try {
             const blogEntry = await BlogEntry.findByIdAndUpdate(args.id,
                 { ...args.blogEntryInput },
                 { new: true });
-            return transformBlogEntry(blogEntry);
+            return { ...blogEntry._doc };
         } catch (err) {
             throw err;
         }
@@ -51,7 +50,7 @@ module.exports = {
     deleteBlogEntry: async (args) => {
         try {
             const blogEntry = await BlogEntry.findByIdAndDelete(args.id);
-            return transformBlogEntry(blogEntry);
+            return { ...blogEntry._doc };
         } catch (err) {
             throw err;
         }

@@ -25,8 +25,8 @@ const blogEntryQuery = `
 `;
 
 const blogEntryMutation = `
-    createBlogEntry(blogEntryInput: BlogEntryInput): BlogEntry
-    editBlogEntry(id: ID!, blogEntryInput: BlogEntryInput): BlogEntry
+    createBlogEntry(blogEntryInput: BlogEntryInput!): BlogEntry
+    updateBlogEntry(id: ID!, blogEntryInput: BlogEntryInput!): BlogEntry
     deleteBlogEntry(id: ID!): BlogEntry
 `;
 
