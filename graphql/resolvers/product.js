@@ -1,34 +1,51 @@
-// const Event = require("../../models/event");
+const Product = require("../../models/product");
 
-// const { transformEvent } = require("./merge");
+const { transformProduct } = require("./merge");
 
-// module.exports = {
-//   events: async () => {
-//     try {
-//       events = await Event.find();
-//       return events.map(event => {
-//         return transformEvent(event);
-//       });
-//     } catch (err) {
-//       throw err;
-//     }
-//   },
+module.exports = {
+    products: async () => {
+        try {
+            const products = await Product.find();
+            return products.map(product => {
+                return transformProduct(product);
+            });
+        } catch (err) {
+            throw err;
+        }
+    },
 
-//   createEvent: async (args, req) => {
-//     // if (!req.isAuth) {
-//     //   throw new Error("Unauthenticated");
-//     // }
-//     const event = Event({
-//       title: args.eventInput.title,
-//       description: args.eventInput.description,
-//       date: new Date(args.eventInput.date),
-//     });
+    product: async (args) => {
+        try {
+            const product = await Product.findById(args.id);
+            return transformProduct(product);
+        } catch (err) {
+            throw err;
+        }
+    },
 
-//     try {
-//       const result = await event.save();
-//       return transformEvent(result);
-//     } catch (err) {
-//       throw err;
-//     }
-//   }
-// };
+    createProduct: async (args) => {
+        // if (!req.isAuth) {
+        //   throw new Error("Unauthenticated");
+        // }
+        const product = Product({
+            name: args.productInput.name,
+            description: args.productInput.description,
+        });
+
+        try {
+            const result = await product.save();
+            return transformProduct(result);
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    deleteProduct: async (args) => {
+        try {
+            const product = await Product.findByIdAndDelete(args.id);
+            return transformProduct(product);
+        } catch (err) {
+            throw err;
+        }
+    }
+};

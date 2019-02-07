@@ -13,9 +13,9 @@ const productSchema = new Schema(
             required: true
         },
         quantity: Number,
-        categories: [{
+        subcategories: [{
             type: Schema.Types.ObjectId,
-            ref: "Category"
+            ref: "Subcategory"
         }]
     },
 );

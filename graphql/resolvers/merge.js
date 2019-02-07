@@ -1,12 +1,13 @@
 const Product = require("../../models/product");
 const Category = require("../../models/category");
+const Subcategory = require("../../models/subcategory");
 
 // const { dateToString } = require("../../helpers/date");
 
 const transformProduct = product => {
     return {
         ...product._doc,
-        categories: getCategories.bind(this, product.categories)
+        subcategories: getSubcategories.bind(this, product.subcategories)
     };
 };
 
@@ -33,8 +34,7 @@ const getProducts = async productIds => {
 const transformCategory = category => {
     return {
         ...category._doc,
-        products: getProducts.bind(this, category.products)
-
+        subcategories: getSubcategories.bind(this, category.subcategories)
     };
 };
 
@@ -58,11 +58,49 @@ const getCategories = async categoryIds => {
     }
 };
 
+const transformSubcategory = subcategory => {
+    return {
+        ...subcategory._doc,
+        products: getProducts.bind(this, subcategory.products)
+    };
+};
+
+const getSubcategory = async id => {
+    try {
+        const subcategory = await Subcategory.findById(id);
+        return transformSubcategory(subcategory);
+    } catch (err) {
+        throw err;
+    }
+};
+
+const getSubcategories = async ids => {
+    try {
+        const subcategories = await Subcategory.find({ _id: { $in: ids } });
+        return subcategories.map(subcategory => {
+            return transformSubcategory(subcategory);
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
+const transformBlogEntry = blogEntry => {
+    return {
+        ...blogEntry._doc,
+    };
+};
+
+exports.transformProduct = transformProduct;
 exports.getProduct = getProduct;
 exports.getProducts = getProducts;
 
+exports.transformCategory = transformCategory;
 exports.getCategories = getCategories;
 exports.getCategory = getCategory;
 
-exports.transformProduct = transformProduct;
-exports.transformCategory = transformCategory;
+exports.transformSubcategory = transformSubcategory;
+exports.getSubcategories = getSubcategories;
+exports.getSubcategory = getSubcategory;
+
+exports.transformBlogEntry = transformBlogEntry;

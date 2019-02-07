@@ -1,49 +1,109 @@
 const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
-type Category {
-    _id: ID!
-    name: String!
-    description: String
-    products: [Product]
-}
+    type Address {
+        _id: ID!
+        street: String!
+        exteriorNumber: Int!
+        city: String
+        postalCode: Int
+    }
+  
+    input AddressInput{
+        street: String!
+        exteriorNumber: Int!
+        city: String
+        postalCode: Int
+    }
+  
+    type BlogEntry {
+        _id: ID!
+        title: String!
+        imageLink: String
+        subtitle: String
+        shortDescription: String
+        description: String!
+        createdAt: String!
+        updatedAt: String!
+    }
 
-input CategoryInput{
-    name: String!
-    description: String
-    products: [ProductInput]
-}
+    input BlogEntryInput{
+        title: String!
+        imageLink: String
+        subtitle: String
+        shortDescription: String
+        description: String!
+    }
 
-type Product {
-    _id: ID!
-    name: String!
-    description: String!
-    quantity: Int
-    categories: [Category]
-}
+    type Category {
+        _id: ID!
+        name: String!
+        description: String
+        subcategories: [Subcategory]
+    }
 
-input ProductInput{
-    name: String!
-    description: String
-    products: [ProductInput]
-}
+    input CategoryInput{
+        name: String!
+        description: String
+        subcategories: [SubcategoryInput]
+    }
 
-type RootQuery {
-    categories: [Category!]!
-    category(id: String): Category
-    products: [Product!]!
-    product(id: String): Product
-}
+    type Subcategory {
+        _id: ID!
+        name: String!
+        description: String
+        products: [Product]
+    }
 
-type RootMutation {
-    createCategory(categoryInput: CategoryInput): Category
-    deleteCategory(id: String): Category
-    createProduct(productInput: ProductInput): Product
-    deleteProduct(id: String): Category
-}
+    input SubcategoryInput{
+        name: String!
+        description: String
+        products: [ProductInput]
+    }
 
-schema {
-    query: RootQuery
-    mutation: RootMutation
-}
+    type Product {
+        _id: ID!
+        name: String!
+        description: String!
+        quantity: Int
+        subcategories: [Subcategory]
+    }
+
+    input ProductInput{
+        name: String!
+        description: String
+        subcategories: [SubcategoryInput]
+    }
+
+    type RootQuery {
+        addresses: [Address!]!
+
+        blog: [BlogEntry!]!
+        blogEntry(id: ID!): BlogEntry!
+
+        categories: [Category!]!
+        category(id: ID!): Category!
+
+        subcategories: [Subcategory!]!
+        subcategory(id: ID!): Subcategory!
+
+        products: [Product!]!
+        product(id: ID!): Product
+    }
+
+    type RootMutation {
+        createAddress(addressInput: AddressInput): Address
+        createBlogEntry(blogEntryInput: BlogEntryInput): BlogEntry
+        createCategory(categoryInput: CategoryInput): Category
+        deleteCategory(id: ID!): Category
+        createSubategory(subcategoryInput: SubcategoryInput): Subcategory
+        deleteSubcategory(id: ID!): Subcategory
+        createProduct(productInput: ProductInput): Product
+        deleteProduct(id: ID!): Product
+    }
+
+    schema {
+        query: RootQuery
+        mutation: RootMutation
+    }
 `);
