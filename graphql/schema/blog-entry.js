@@ -11,11 +11,11 @@ const blogEntryDef = `
     }
 
     input BlogEntryInput{
-        title: String!
+        title: String
         imageLink: String
         subtitle: String
         shortDescription: String
-        description: String!
+        description: String
     }
 `;
 
@@ -26,6 +26,7 @@ const blogEntryQuery = `
 
 const blogEntryMutation = `
     createBlogEntry(blogEntryInput: BlogEntryInput): BlogEntry
+    editBlogEntry(id: ID!, blogEntryInput: BlogEntryInput): BlogEntry
     deleteBlogEntry(id: ID!): BlogEntry
 `;
 

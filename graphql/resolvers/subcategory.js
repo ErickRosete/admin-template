@@ -28,8 +28,7 @@ module.exports = {
     //   throw new Error("Unauthenticated");
     // }
     const subcategory = Subcategory({
-      name: args.subcategoryInput.name,
-      description: args.subcategoryInput.description,
+      ...args.subcategoryInput
     });
 
     try {

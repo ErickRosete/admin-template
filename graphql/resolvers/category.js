@@ -27,8 +27,7 @@ module.exports = {
     //   throw new Error("Unauthenticated");
     // }
     const category = Category({
-      name: args.categoryInput.name,
-      description: args.categoryInput.description,
+      ...args.categoryInput
     });
 
     try {

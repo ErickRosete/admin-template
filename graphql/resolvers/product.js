@@ -28,8 +28,7 @@ module.exports = {
         //   throw new Error("Unauthenticated");
         // }
         const product = Product({
-            name: args.productInput.name,
-            description: args.productInput.description,
+            ...args.productInput
         });
 
         try {

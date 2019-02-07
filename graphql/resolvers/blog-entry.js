@@ -27,15 +27,22 @@ module.exports = {
         //   throw new Error("Unauthenticated");
         // }
         const blogEntry = BlogEntry({
-            title: args.blogEntryInput.title,
-            subtitle: args.blogEntryInput.subtitle,
-            imageLink: args.blogEntryInput.imageLink,
-            shortDescription: args.blogEntryInput.shortDescription,
-            description: args.blogEntryInput.description,
+            ...args.blogEntryInput
         });
         try {
             const result = await blogEntry.save();
             return transformBlogEntry(result);
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    editBlogEntry: async (args) => {
+        try {
+            const blogEntry = await BlogEntry.findByIdAndUpdate(args.id,
+                { ...args.blogEntryInput },
+                { new: true });
+            return transformBlogEntry(blogEntry);
         } catch (err) {
             throw err;
         }
