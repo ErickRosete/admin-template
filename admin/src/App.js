@@ -1,46 +1,33 @@
 import React, { Component } from "react";
 
+//theme
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
+import { purple, red } from '@material-ui/core/colors';
 import CssBaseline from "@material-ui/core/CssBaseline";
+import "./App.css";
 
-import MainNavigation from "./components/Navigation/MainNavigation";
+//routes
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-
-// import AuthPage from "./pages/Auth/Auth";
+import AuthPage from "./pages/Auth/Auth";
 import BlogPage from "./pages/Blog/Blog";
 import BlogFormPage from "./pages/Blog/BlogForm";
 import NewsletterPage from "./pages/Newsletter/Newsletter";
+import ExamplePage from "./pages/Example/Example";
 
+//Providers and context
+import { ApolloProvider } from "react-apollo";
+import ApolloClient from "apollo-boost";
 import AuthContext from "./context/auth-context";
-import "./App.css";
 
-const styles = theme => ({
-  root: {
-    display: "flex"
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 3
-  }
+
+const client = new ApolloClient({
+  uri: "https://48p1r2roz4.sse.codesandbox.io"
 });
-
-//   {
-//   palette: {
-//     primary: purple,
-//     secondary: green,
-//   },
-//   status: {
-//     danger: 'orange',
-//   },
-// }
 
 class App extends Component {
   state = {
     token: null,
-    userId: null,
-    title: "Astradev"
+    userId: null
   };
 
   login = (token, userId, tokenExpiration) => {
@@ -51,88 +38,52 @@ class App extends Component {
     this.setState({ token: null, userId: null });
   };
 
-  changeTitle = title => {
-    console.log(title);
-    this.setState({ title });
-  };
-
   render() {
-    const theme = createMuiTheme();
-    const { classes } = this.props;
+    const theme = createMuiTheme({
+      palette: {
+        primary: purple,
+        secondary: red,
+      },
+      typography: {
+        useNextVariants: true,
+      },
+    });
 
     return (
       <BrowserRouter>
         <AuthContext.Provider
           value={{
-            token: this.state.token,
-            userId: this.state.userId,
-            login: this.login,
-            logout: this.logout
+            token: this.state.token, userId: this.state.userId,
+            login: this.login, logout: this.logout
           }}
         >
-          <MuiThemeProvider theme={theme}>
-            <div className={classes.root}>
+          <ApolloProvider client={client}>
+            <MuiThemeProvider theme={theme}>
               <CssBaseline />
-              <MainNavigation title={this.state.title} />
-
-              <main className={classes.content}>
-                <div className={classes.toolbar} />
-
-                {/* {this.state.token ? ( */}
-                <React.Fragment>
-                  <Switch>
-                    <Route
-                      path="/blog/agregar"
-                      render={props => (
-                        <BlogFormPage
-                          {...props}
-                          title={this.state.title}
-                          changeTitle={this.changeTitle}
-                        />
-                      )}
-                    />
-                    <Route
-                      path="/blog/editar/:id"
-                      render={props => (
-                        <BlogFormPage
-                          {...props}
-                          title={this.state.title}
-                          changeTitle={this.changeTitle}
-                        />
-                      )}
-                    />
-                    <Route
-                      path="/blog"
-                      render={props => (
-                        <BlogPage
-                          {...props}
-                          title={this.state.title}
-                          changeTitle={this.changeTitle}
-                        />
-                      )}
-                    />
-                    <Route path="/newsletter" component={NewsletterPage} />
-                    <Redirect to="/events" exact />
-                  </Switch>
-                </React.Fragment>
-                {/* ) : (
+              {/* {this.state.token ? ( */}
+              <React.Fragment>
+                <Switch>
+                  <Route path="/blog/agregar" component={BlogFormPage} />
+                  <Route path="/blog/editar/:id" component={BlogFormPage} />
+                  <Route path="/blog" component={BlogPage} />
+                  <Route path="/newsletter" component={NewsletterPage} />
+                  <Route path="/example" component={ExamplePage} />
+                  <Route path="/auth" component={AuthPage} />
+                  <Redirect to="/example" exact />
+                </Switch>
+              </React.Fragment>
+              {/* ) : (
               <Switch>
                 <Route path="/auth" component={AuthPage} />
                 <Redirect to="/auth" exact />
               </Switch>
             )} */}
-              </main>
-            </div>
-          </MuiThemeProvider>
+            </MuiThemeProvider>
+          </ApolloProvider>
         </AuthContext.Provider>
       </BrowserRouter>
     );
   }
 }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
-};
-
-export default withStyles(styles, { withTheme: true })(App);
+export default App;

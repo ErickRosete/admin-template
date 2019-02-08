@@ -13,10 +13,9 @@ import Hidden from "@material-ui/core/Hidden";
 import EventIcon from "@material-ui/icons/Event";
 import { NavLink } from "react-router-dom";
 
-import "./MainDrawer.css";
-// import logo from "../../../assets/images/landing-page/logo.png";
+// import logo from "../../assets/images/logos/logo.png";
 
-const drawerWidth = 240;
+const drawerWidth = 241;
 
 const styles = theme => ({
   drawer: {
@@ -32,6 +31,13 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.main,
     color: "white"
   },
+  drawerTitle: {
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    margin: 'auto',
+    textDecoration: 'none',
+  },
   drawerPaper: {
     width: drawerWidth
   }
@@ -41,15 +47,15 @@ const ResponsiveDrawer = props => {
   const sideLinks = [
     { id: 1, icon: <EventIcon />, text: "Blog", linkTo: "/blog" },
     { id: 2, icon: <EventIcon />, text: "Newsletter", linkTo: "/newsletter" },
+    { id: 3, icon: <EventIcon />, text: "Example", linkTo: "/example" },
   ];
 
   const { classes, theme } = props;
-
   const drawer = (
     <div>
       <div className={classes.toolbar}>
-        <NavLink to="/" className="drawer__title">
-          {/* <img height="50" src={logo} alt="logo" /> */}
+        <NavLink to="/" className={classes.drawerTitle} exact>
+          {/* <img height="50" style={{ marginRight: '1rem' }} src={logo} alt="logo" /> */}
           <Typography variant="h6" color="inherit">
             Astradev
           </Typography>
@@ -58,15 +64,13 @@ const ResponsiveDrawer = props => {
 
       <Divider />
 
-      <List className="drawer__list">
+      <List>
         {sideLinks.map(sideLink => (
           <ListItem
             button
             key={sideLink.id}
             component={NavLink}
             to={sideLink.linkTo}
-            onClick={props.toggleDrawer.bind(this, false)}
-            onKeyDown={props.toggleDrawer.bind(this, false)}
           >
             <ListItemIcon>{sideLink.icon}</ListItemIcon>
             <ListItemText primary={sideLink.text} />
@@ -77,7 +81,7 @@ const ResponsiveDrawer = props => {
       <Divider />
     </div>
   );
-  
+
   return (
     <nav className={classes.drawer}>
       <Hidden smUp implementation="css">

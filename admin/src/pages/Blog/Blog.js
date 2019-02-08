@@ -1,23 +1,38 @@
 import React, { Component } from "react";
+import Layout from "../../containers/Layout/Layout"
+
+//Route
 import Link from "react-router-dom/Link";
+
+//Grid
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import ListSubheader from "@material-ui/core/ListSubheader";
 
-//Responsive
+//wrappers
+import compose from 'recompose/compose';
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
+//Buttons
 import Fab from "@material-ui/core/Fab";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 // import Button from "@material-ui/core/Button";
 
-// import image1 from "../../assets/images/landing-page/alabando.jpg";
-// import image2 from "../../assets/images/landing-page/baile.jpg";
-
+//Style
 import "./Blog.css";
+
+const styles = theme => ({
+  fab: {
+    position: 'absolute',
+    top: theme.mixins.toolbar.minHeight + theme.spacing.unit * 3,
+    right: theme.spacing.unit * 2,
+  },
+});
 
 export class Blog extends Component {
   state = {
@@ -61,14 +76,10 @@ export class Blog extends Component {
     ]
   };
 
-  componentDidMount() {
-    if (this.props.title !== "Lista de blogs")
-      this.props.changeTitle("Lista de blogs");
-  }
-
   deleteBlog = id => {
     console.log(id);
   };
+
   getGridListCols = () => {
     if (isWidthUp("lg", this.props.width)) {
       return 3;
@@ -80,25 +91,13 @@ export class Blog extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     const tileData = [...this.state.tileData];
     const gridListCols = this.getGridListCols();
-
+    console.log(this.props)
     return (
-      <div className="blog">
-        {/* <div className="blog__top">
-          <h1 className="blog__title">Lista de blogs</h1>
-          <div className="show-in-desktop">
-            <Button variant="contained" color="primary">
-              <Link className="primary-btn-link" to="/blog/agregar">
-                <AddIcon /> Agregar
-              </Link>
-            </Button>
-          </div>
-        </div> */}
-
-        {/* <div className={classes.root}> */}
-
-        <div>
+      <Layout title="Lista de blogs">
+        <div className="blog">
           <GridList cellHeight={200} cols={gridListCols} spacing={15}>
             <GridListTile
               key="Subheader"
@@ -140,14 +139,17 @@ export class Blog extends Component {
           </GridList>
         </div>
 
-        <Link className="top-right-abs" to="/blog/agregar">
+        <Link className={classes.fab} to="/blog/agregar">
           <Fab color="primary" aria-label="Add">
             <AddIcon />
           </Fab>
         </Link>
-      </div>
+      </Layout>
     );
   }
 }
+Blog.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-export default withWidth()(Blog);
+export default compose(withStyles(styles), withWidth())(Blog); 

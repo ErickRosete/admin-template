@@ -1,31 +1,18 @@
 import React, { Component } from "react";
+import Layout from "../../containers/Layout/Layout"
+
+//Text Editor
 import { EditorState, ContentState } from "draft-js";
 // import { convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 // import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+
+//Style
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./BlogForm.css";
 
 export class BlogFormPage extends Component {
-  componentDidMount() {
-    const id = this.props.match.params.id;
-    if (id == null) {
-      if (this.props.title !== "Agregar entrada de blog") {
-        this.props.changeTitle("Agregar entrada de blog");
-      }
-    } else {
-      if (this.props.title !== "Editar entrada de blog") {
-        this.props.changeTitle("Editar entrada de blog");
-      }
-      this.fetchBlogEntry(id);
-    }
-  }
-
-  fetchBlogEntry = id => {
-    console.log(id);
-  };
-
   constructor(props) {
     super(props);
     const html = "<p>Hey this <strong>editor</strong> rocks 😀</p>";
@@ -35,9 +22,18 @@ export class BlogFormPage extends Component {
         contentBlock.contentBlocks
       );
       const editorState = EditorState.createWithContent(contentState);
+
       this.state = {
-        editorState
+        editorState,
+        add: true
       };
+    }
+  }
+
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    if (id != null) {
+      this.setState({ add: false });
     }
   }
 
@@ -48,21 +44,23 @@ export class BlogFormPage extends Component {
   };
 
   render() {
-    const { editorState } = this.state;
+    const { editorState, add } = this.state;
     return (
-      <div className="blog-form">
-        <label>Contenido del blog </label>
-        <Editor
-          editorState={editorState}
-          wrapperClassName="wrapper"
-          editorClassName="editor"
-          onEditorStateChange={this.onEditorStateChange}
-        />
-        {/* <textarea
+      <Layout title={add ? "Agregar entrada de blog" : "Editar entrada de blog"}>
+        <div className="blog-form">
+          <label>Contenido del blog </label>
+          <Editor
+            editorState={editorState}
+            wrapperClassName="wrapper"
+            editorClassName="editor"
+            onEditorStateChange={this.onEditorStateChange}
+          />
+          {/* <textarea
           disabled
           value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
         /> */}
-      </div>
+        </div>
+      </Layout>
     );
   }
 }
