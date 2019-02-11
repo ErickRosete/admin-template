@@ -1,99 +1,38 @@
 import React, { Component } from "react";
 import Layout from "../../containers/Layout/Layout";
 
-//Route
-import Link from "react-router-dom/Link";
-
-//wrappers
+//styles
+import { styles } from "./constants"
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 //table
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import Table from "../../components/Category/Table";
 
 //Buttons
 import Fab from "@material-ui/core/Fab";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
-import Button from "@material-ui/core/Button";
 
 //Dialog
 import DeleteDialog from "../../components/Dialog/DeleteDialog";
 import FormDialog from "../../containers/Category/FormDialog";
 
+//graphql
 import { Query, Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-const styles = theme => ({
-  fab: {
-    position: "absolute",
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2
-  },
-  progress: {
-    margin: theme.spacing.unit * 2
-  },
-  table: {
-    minWidth: 700
-  },
-  tableRoot: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
-  },
-  button: {
-    margin: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  }
-});
-
-const GET_CATEGORIES = gql`
-  {
-    categories {
-      _id
-      name
-    }
-  }
-`;
-
-const DELETE_CATEGORY = gql`
-  mutation DeleteCategory($id: ID!) {
-    deleteCategory(id: $id) {
-      _id
-    }
-  }
-`;
-
-const EDIT_CATEGORY = gql`
-  mutation UpdateCategory($id: ID!, $name: String, $description: String) {
-    updateCategory(
-      id: $id
-      categoryInput: { name: $name, description: $description }
-    ) {
-      _id
-    }
-  }
-`;
+import { GET_CATEGORIES, DELETE_CATEGORY, EDIT_CATEGORY, ADD_CATEGORY } from "./constants"
 
 export class CategoryPage extends Component {
   state = {
     openDeleteDialog: false,
     openEditDialog: false,
-    selectedId: null
+    openAddDialog: false,
+    selectedCategory: { _id: ""},
   };
 
-  handleClickOpenDeleteDialog = id => {
+  handleClickOpenDeleteDialog = category => {
     this.setState({
-      selectedId: id,
+      selectedCategory: category,
       openDeleteDialog: true
     });
   };
@@ -102,9 +41,9 @@ export class CategoryPage extends Component {
     this.setState({ openDeleteDialog: false });
   };
 
-  handleClickOpenEditDialog = id => {
+  handleClickOpenEditDialog = category => {
     this.setState({
-      selectedId: id,
+      selectedCategory: category,
       openEditDialog: true
     });
   };
@@ -113,70 +52,32 @@ export class CategoryPage extends Component {
     this.setState({ openEditDialog: false });
   };
 
+  handleClickOpenAddDialog = () => {
+    this.setState({ openAddDialog: true });
+  };
+
+  handleCloseAddDialog = () => {
+    this.setState({ openAddDialog: false });
+  };
+
   render() {
     const { classes } = this.props;
-
     return (
       <Layout title="Lista de categorias">
-        <div className="category">
+        <div className={classes.category}>
+          {/* GET */}
           <Query query={GET_CATEGORIES}>
             {({ loading, error, data }) => {
               if (loading)
                 return <CircularProgress className={classes.progress} />;
               if (error) return <p>Error :(</p>;
-              return (
-                <Paper className={classes.tableRoot}>
-                  <Table className={classes.table}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Nombre de categoria</TableCell>
-                        <TableCell align="right">acciones</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {data.categories.map(row => (
-                        <TableRow key={row.id}>
-                          <TableCell component="th" scope="row">
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              aria-label="Edit"
-                              className={classes.button}
-                              onClick={this.handleClickOpenDeleteDialog.bind(
-                                this,
-                                row._id
-                              )}
-                            >
-                              Editar
-                              <EditIcon className={classes.rightIcon} />
-                            </Button>
-
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              aria-label="Delete"
-                              className={classes.button}
-                              onClick={this.handleClickOpenDeleteDialog.bind(
-                                this,
-                                row._id
-                              )}
-                            >
-                              Eliminar
-                              <DeleteIcon className={classes.rightIcon} />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
-              );
+              return (<Table categories={data.categories}
+                openEdit={this.handleClickOpenEditDialog}
+                openDelete={this.handleClickOpenDeleteDialog} />);
             }}
           </Query>
 
+          {/* DELETE */}
           <Mutation
             mutation={DELETE_CATEGORY}
             update={(cache, { data: { deleteCategory } }) => {
@@ -197,7 +98,7 @@ export class CategoryPage extends Component {
                 open={this.state.openDeleteDialog}
                 onConfirm={() => {
                   deleteCategory({
-                    variables: { id: this.state.selectedId }
+                    variables: { id: this.state.selectedCategory._id }
                   });
                   this.setState({
                     selectedId: null,
@@ -209,17 +110,27 @@ export class CategoryPage extends Component {
             )}
           </Mutation>
 
-          <Mutation mutation={EDIT_CATEGORY}>
+          {/* EDIT */}
+          <Mutation mutation={EDIT_CATEGORY}
+            update={(cache, { data: { updateCategory } }) => {
+              const { categories } = cache.readQuery({ query: GET_CATEGORIES });
+              let editedCategoryIndex = categories.findIndex(category => category._id === updateCategory._id)
+              categories[editedCategoryIndex] = updateCategory
+              cache.writeQuery({
+                query: GET_CATEGORIES,
+                data: { categories: categories }
+              });
+            }}>
             {updateCategory => (
               <FormDialog
-                category={this.state.selectedId}
+                key={this.state.selectedCategory._id}
+                category={this.state.selectedCategory}
                 open={this.state.openEditDialog}
-                onConfirm={() => {
+                onConfirm={(category) => {
                   updateCategory({
-                    variables: { id: this.state.selectedId }
+                    variables: { ...category }
                   });
                   this.setState({
-                    selectedId: null,
                     openEditDialog: false
                   });
                 }}
@@ -228,13 +139,36 @@ export class CategoryPage extends Component {
             )}
           </Mutation>
 
-          <Link className={classes.fab} to="/blog/agregar">
-            <Fab color="primary" aria-label="Add">
-              <AddIcon />
-            </Fab>
-          </Link>
+          {/* ADD */}
+          <Fab className={classes.fab} color="primary" aria-label="Add" onClick={this.handleClickOpenAddDialog}>
+            <AddIcon />
+          </Fab>
 
-          
+          <Mutation mutation={ADD_CATEGORY}
+            update={(cache, { data: { createCategory } }) => {
+              const { categories } = cache.readQuery({ query: GET_CATEGORIES });
+              categories.push(createCategory)
+              cache.writeQuery({
+                query: GET_CATEGORIES,
+                data: { categories: categories }
+              });
+            }}>
+            {createCategory => (
+              <FormDialog
+                open={this.state.openAddDialog}
+                onConfirm={(category) => {
+                  createCategory({
+                    variables: { ...category }
+                  });
+                  this.setState({
+                    openAddDialog: false
+                  });
+                }}
+                onCancel={this.handleCloseAddDialog}
+              />
+            )}
+          </Mutation>
+
         </div>
       </Layout>
     );
