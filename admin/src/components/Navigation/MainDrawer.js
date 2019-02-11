@@ -47,7 +47,9 @@ const ResponsiveDrawer = props => {
   const sideLinks = [
     { id: 1, icon: <EventIcon />, text: "Blog", linkTo: "/blog" },
     { id: 2, icon: <EventIcon />, text: "Newsletter", linkTo: "/newsletter" },
-    { id: 3, icon: <EventIcon />, text: "Example", linkTo: "/example" },
+    { id: 3, icon: <EventIcon />, text: "Categorias", linkTo: "/category" },
+    { id: 4, icon: <EventIcon />, text: "Subcategorias", linkTo: "/subcategory" },
+    { id: 5, icon: <EventIcon />, text: "Example", linkTo: "/example" },
   ];
 
   const { classes, theme } = props;

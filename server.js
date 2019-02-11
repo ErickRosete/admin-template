@@ -6,9 +6,13 @@ const mongoose = require("mongoose");
 const graphqlSchema = require("./graphql/schema/index");
 const graphqlResolvers = require("./graphql/resolvers/index");
 
+const externalRequest = require("./middleware/external-requests");
+
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use(externalRequest);
 
 app.use(
     "/graphql",
