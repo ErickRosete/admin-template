@@ -12,9 +12,9 @@ export class FormDialog extends Component {
 
     let name;
     let description;
-    if (this.props.category) {
-      name = this.props.category.name ? this.props.category.name : "";
-      description = this.props.category.description ? this.props.category.description : "";
+    if (this.props.subcategory) {
+      name = this.props.subcategory.name ? this.props.subcategory.name : "";
+      description = this.props.subcategory.description ? this.props.subcategory.description : "";
     }
     else {
       name = "";
@@ -45,17 +45,17 @@ export class FormDialog extends Component {
     }
 
     //grouping info
-    let category = {
+    let subcategory = {
       name: this.state.name,
       description: this.state.description
     }
 
     //adding id in edit
-    if (this.props.category) {
-      category = { ...category, id: this.props.category._id }
+    if (this.props.subcategory) {
+      subcategory = { ...subcategory, id: this.props.subcategory._id }
     }
 
-    this.props.onConfirm(category);
+    this.props.onConfirm(subcategory);
   }
 
   render() {
@@ -63,12 +63,12 @@ export class FormDialog extends Component {
       <Dialog
         open={this.props.open}
         onClose={this.props.handleClose}
-        aria-labelledby="form-category-dialog"
+        aria-labelledby="form-subcategory-dialog"
       >
-        {this.props.category ?
-          <DialogTitle id="form-category-dialog">Editar Categoria</DialogTitle> :
-          <DialogTitle id="form-category-dialog">Añadir Categoria</DialogTitle>}
-          
+        {this.props.subcategory ?
+          <DialogTitle id="form-subcategory-dialog">Editar Subcategoria</DialogTitle> :
+          <DialogTitle id="form-subcategory-dialog">Añadir Subcategoria</DialogTitle>}
+
         <DialogContent>
           <TextField
             required

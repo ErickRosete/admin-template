@@ -31,19 +31,19 @@ const styles = theme => ({
     }
 });
 
-const CategoryTable = (props) => {
+const SubcategoryTable = (props) => {
     const { classes } = props;
     return (
         <Paper className={classes.tableRoot}>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Nombre de categoria</TableCell>
+                        <TableCell>Nombre de subcategoria</TableCell>
                         <TableCell align="right">acciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.categories.map(row => (
+                    {props.subcategories.map(row => (
                         <TableRow key={row._id}>
                             <TableCell component="th" scope="row">
                                 {row.name}
@@ -54,7 +54,10 @@ const CategoryTable = (props) => {
                                     color="primary"
                                     aria-label="Edit"
                                     className={classes.button}
-                                    onClick={props.openEdit.bind(this, row)}
+                                    onClick={props.openEdit.bind(
+                                        this,
+                                        row
+                                    )}
                                 >
                                     Editar
                               <EditIcon className={classes.rightIcon} />
@@ -65,7 +68,10 @@ const CategoryTable = (props) => {
                                     color="secondary"
                                     aria-label="Delete"
                                     className={classes.button}
-                                    onClick={props.openDelete.bind(this, row)}
+                                    onClick={props.openDelete.bind(
+                                        this,
+                                        row
+                                    )}
                                 >
                                     Eliminar
                               <DeleteIcon className={classes.rightIcon} />
@@ -79,8 +85,8 @@ const CategoryTable = (props) => {
     )
 }
 
-CategoryTable.propTypes = {
+SubcategoryTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CategoryTable);
+export default withStyles(styles)(SubcategoryTable);

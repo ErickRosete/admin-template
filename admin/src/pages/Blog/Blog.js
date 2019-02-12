@@ -26,8 +26,8 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteDialog from "../../components/Dialog/DeleteDialog";
 
 import { Query, Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { GET_BLOG, DELETE_BLOGENTRY } from "./constants";
 
 const styles = theme => ({
   fab: {
@@ -38,31 +38,16 @@ const styles = theme => ({
   progress: {
     margin: theme.spacing.unit * 2
   },
+  actionIcons: {
+    display: "flex",
+    flexShrink: "1"
+  },
   fabOptions: {
     margin: theme.spacing.unit
   }
 });
 
-const GET_BLOG = gql`
-  {
-    blog {
-      _id
-      title
-      subtitle
-      imageLink
-    }
-  }
-`;
-
-const DELETE_BLOGENTRY = gql`
-  mutation DeleteBlogEntry($id: ID!) {
-    deleteBlogEntry(id: $id) {
-      _id
-    }
-  }
-`;
-
-export class BlogPage extends Component {
+export class Blog extends Component {
   state = {
     openDialog: false,
     selectedId: null
@@ -105,12 +90,12 @@ export class BlogPage extends Component {
                 <GridList cellHeight={200} cols={gridListCols} spacing={15}>
                   {data.blog.map(tile => (
                     <GridListTile key={tile._id} cols={1}>
-                      {/* <img src={tile.img} alt={tile.title} /> */}
+                      <img src={tile.imageLink} alt={tile.title} />
                       <GridListTileBar
                         title={tile.title}
-                        subtitle={<span>by: {tile.subtitle}</span>}
+                        subtitle={<span>{tile.subtitle}</span>}
                         actionIcon={
-                          <React.Fragment>
+                          <div className={classes.actionIcons}>
                             <Link to={`blog/editar/${tile._id}`}>
                               <Fab
                                 color="primary"
@@ -131,7 +116,7 @@ export class BlogPage extends Component {
                             >
                               <DeleteIcon />
                             </Fab>
-                          </React.Fragment>
+                          </div>
                         }
                       />
                     </GridListTile>
@@ -184,11 +169,11 @@ export class BlogPage extends Component {
   }
 }
 
-BlogPage.propTypes = {
+Blog.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
 export default compose(
   withStyles(styles),
   withWidth()
-)(BlogPage);
+)(Blog);

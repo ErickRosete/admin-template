@@ -19,8 +19,8 @@ const subcategoryQuery = `
 `;
 
 const subcategoryMutation = `
-    createSubategory(subcategoryInput: SubcategoryInput!): Subcategory
-    updateSubcategory(id: ID!, categoryInput: CategoryInput!): Subcategory
+    createSubcategory(subcategoryInput: SubcategoryInput!): Subcategory
+    updateSubcategory(id: ID!, subcategoryInput: SubcategoryInput!): Subcategory
     deleteSubcategory(id: ID!): Subcategory
 `;
 

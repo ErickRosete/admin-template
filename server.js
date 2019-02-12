@@ -1,17 +1,20 @@
 const express = require("express");
 const expressGraphQL = require("express-graphql");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
 const graphqlSchema = require("./graphql/schema/index");
 const graphqlResolvers = require("./graphql/resolvers/index");
 
+const multer = require("multer");
+const bodyParser = require("body-parser");
+
 const externalRequest = require("./middleware/external-requests");
+
+const { saveImage } = require("./helpers/saveImage");
 
 const app = express();
 
 app.use(bodyParser.json());
-
+app.use(express.static('public'))
 app.use(externalRequest);
 
 app.use(
@@ -22,6 +25,14 @@ app.use(
         graphiql: true
     })
 );
+
+const upload = multer({
+    dest: "/uploads"
+});
+
+app.post('/uploadImage', upload.single("file"), (req, res) => {
+    saveImage(req, res);
+});
 
 mongoose
     .connect(
