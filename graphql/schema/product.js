@@ -3,13 +3,13 @@ const productDef = `
         _id: ID!
         name: String!
         description: String
-        products: [Product]
+        subcategories: [Subcategory]
     }
 
     input ProductInput{
         name: String!
         description: String
-        products: [ProductInput]
+        subcategories: [ID]
     }
 `;
 
