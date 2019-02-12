@@ -5,8 +5,11 @@ module.exports = {
     users: async () => {
         try {
             const users = await User.find();
+            // return users.map(user => {
+            //     return { ...user._doc };
+            // });
             return users.map(user => {
-                return { ...user._doc };
+                return transformUser(user);
             });
         } catch (err) {
             throw err;
@@ -35,10 +38,11 @@ module.exports = {
         // createAddress
         // createAddress.bind(this,args);
         // (args)=>createAddress.bind(this,args);
-        createAddress(args)
+        const result = await createAddress(args.userInput.mainAddress)
+        console.log(`la creacion dejo ${result}`)
         const user = User({
             ...args.userInput,
-            mainAddress: "asdfadxfasdfasf"
+            mainAddress: result
         });
         try {
             const result = await user.save();
