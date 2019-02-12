@@ -1,4 +1,4 @@
-const AddressDef = `
+const addressDef = `
         type Address{
             _id: ID!
             street: String!
@@ -17,17 +17,17 @@ const AddressDef = `
         }
 `;
 
-const AddressQuery = `
+const addressQuery = `
     addresses: [Address!]!
     address(id: ID!): Address!
 `;
 
-const AddressMutation = `
+const addressMutation = `
     createAddress(addressInput: AddressInput): Address
     updateAddress(id: ID!,addressInput: AddressInput): Address
     deleteAddress(id: ID!): Address
 `;
 
-exports.AddressDef = AddressDef;
-exports.AddressQuery = AddressQuery;
-exports.AddressMutation = AddressMutation;
+exports.addressDef = addressDef;
+exports.addressQuery = addressQuery;
+exports.addressMutation = addressMutation;
