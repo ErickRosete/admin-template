@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import Form from "../../../containers/Blog/Form";
+import Form from "../../../containers/Product/Form";
+import Redirect from "react-router-dom/Redirect";
 import Spinner from "../../../components/Spinner/Spinner";
 import Layout from "../../../containers/Layout/Layout";
 import { Query, Mutation } from "react-apollo";
@@ -20,17 +21,17 @@ class ProductFormPage extends Component {
   render() {
     return (
       <Layout
-        title={this.props.match.params.id ? "Editar entrada de blog" : "Añadir entrada de Blog"}
+        title={this.props.match.params.id ? "Editar producto" : "Añadir producto"}
       >
 
-        {this.state.return && <Redirect push to="/products"></Redirect>}
+        {this.state.return && <Redirect push to="/product"></Redirect>}
 
         {this.props.match.params.id ? (
           // Edit
           <Query query={GET_PRODUCT} variables={{ id: this.id }}>
             {({ loading, error, data }) => {
               if (loading) return <Spinner />;
-              if (error) return <p>Error :(</p>;
+              if (error) return <p>Error :( recarga la página!</p>;
               return (
                 <Mutation
                   mutation={EDIT_PRODUCT}

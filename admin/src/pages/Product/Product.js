@@ -8,6 +8,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Spinner from "../../components/Spinner/Spinner"
 import { DELETE_PRODUCT, GET_PRODUCTS } from './constants';
 
+import CardList from "../../components/Product/CardList/CardList"
+
 //Buttons
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -54,7 +56,11 @@ export class ProductPage extends Component {
                                 return <Spinner />;
                             if (error) return <p>Error :( recarga la pagina!</p>;
                             return (
-                                <p>Hola</p>
+                                <CardList
+                                    products={data.products}
+                                    openDeleteDialog={this.handleClickOpenDeleteDialog}
+                                >
+                                </CardList>
                             );
                         }}
                     </Query>

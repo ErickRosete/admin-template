@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 
 const externalRequest = require("./middleware/external-requests");
 
-const { saveImage } = require("./helpers/saveImage");
+const { saveImage, saveImages } = require("./helpers/images");
 
 const app = express();
 
@@ -32,6 +32,10 @@ const upload = multer({
 
 app.post('/uploadImage', upload.single("file"), (req, res) => {
     saveImage(req, res);
+});
+
+app.post('/uploadImages', upload.array("files"), (req, res) => {
+    saveImages(req, res);
 });
 
 mongoose

@@ -1,3 +1,5 @@
+
+
 import React, { Component } from "react";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -23,19 +25,17 @@ export class Form extends Component {
     super(props);
 
     let editorState;
-    let title;
-    let subtitle;
+    let name;
+    let imageLinks;
     let shortDescription;
-    let imageLink;
 
-    if (props.blogEntry) {
-      console.log(props.blogEntry);
-      title = props.blogEntry.title ? props.blogEntry.title : "";
-      subtitle = props.blogEntry.subtitle ? props.blogEntry.subtitle : "";
-      shortDescription = props.blogEntry.shortDescription ? props.blogEntry.shortDescription : "";
-      imageLink = props.blogEntry.imageLink ? props.blogEntry.imageLink : "";
+    if (props.product) {
+      console.log(props.product);
+      name = props.product.name ? props.product.name : "";
+      shortDescription = props.product.shortDescription ? props.product.shortDescription : "";
+      imageLinks = props.product.imageLinks ? props.product.imageLinks : [""];
       //editor
-      const html = props.blogEntry.description;
+      const html = props.product.description;
       const contentBlock = htmlToDraft(html);
       if (contentBlock) {
         const contentState = ContentState.createFromBlockArray(
@@ -44,20 +44,18 @@ export class Form extends Component {
         editorState = EditorState.createWithContent(contentState);
       }
     } else {
-      title = "";
-      subtitle = "";
+      name = "";
       shortDescription = "";
-      imageLink = "";
+      imageLinks = [""];
       editorState = EditorState.createEmpty();
     }
 
     this.state = {
-      title,
-      subtitle,
+      name,
       shortDescription,
       editorState,
-      imageLink,
-      uploadingImage: false,
+      imageLinks,
+      uploadingImages: false,
     };
   }
 
@@ -67,15 +65,15 @@ export class Form extends Component {
     });
   };
 
-  changeTitleHandler = event => {
+  changenameHandler = event => {
     this.setState({
-      title: event.target.value
+      name: event.target.value
     });
   };
 
-  changeSubtitleHandler = event => {
+  changeSubnameHandler = event => {
     this.setState({
-      subtitle: event.target.value
+      subname: event.target.value
     });
   };
 
@@ -86,15 +84,15 @@ export class Form extends Component {
   };
 
   changeImageHandler = event => {
-    this.setState({ uploadingImage: true });
+    this.setState({ uploadingImages: true });
 
-    const image = event.target.files[0];
     var formData = new FormData();
-    formData.append("file", image);
-    formData.append("name", image.name);
+    Array.from(event.target.files).forEach(image => {
+      formData.append("files", image);
+    })
 
     // headers: { "Content-Type": "multipart/form-data" },
-    fetch(`http://localhost:5000/uploadImage`, {
+    fetch(`http://localhost:5000/uploadImages`, {
       method: "POST",
       body: formData
     })
@@ -105,11 +103,11 @@ export class Form extends Component {
         return res.json();
       })
       .then(resData => {
-        this.setState({ uploadingImage: false, imageLink: resData });
+        this.setState({ uploadingImages: false, imageLinks: resData });
         console.log(resData);
       })
       .catch(err => {
-        this.setState({ uploadingImage: false });
+        this.setState({ uploadingImages: false });
         console.log(err);
       });
   }
@@ -117,14 +115,13 @@ export class Form extends Component {
   onSubmitHandler = event => {
     event.preventDefault();
 
-    const title = this.state.title;
-    if (title === "") {
+    const name = this.state.name;
+    if (name === "") {
       return;
     }
 
-    let blogEntry = {
-      title,
-      subtitle: this.state.subtitle,
+    let product = {
+      name,
       imageLink: this.state.imageLink,
       shortDescription: this.state.shortDescription,
       description: draftToHtml(
@@ -132,17 +129,17 @@ export class Form extends Component {
       )
     };
 
-    if (this.props.blogEntry) {
-      blogEntry = { id: this.props.blogEntry._id, ...blogEntry };
+    if (this.props.product) {
+      product = { id: this.props.product._id, ...product };
     }
 
-    this.props.onSubmit(blogEntry);
+    this.props.onSubmit(product);
   };
 
   render() {
     const { classes } = this.props;
     return (
-      <form className="blog-form" onSubmit={this.onSubmitHandler}>
+      <form className="product-form" onSubmit={this.onSubmitHandler}>
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <TextField
@@ -150,55 +147,48 @@ export class Form extends Component {
               autoFocus
               className={classes.textfield}
               margin="dense"
-              label="Título"
+              label="Nombre"
               type="text"
               fullWidth
-              value={this.state.title}
-              onChange={this.changeTitleHandler}
-              error={this.state.title === ""}
-              helperText={this.state.title === "" ? "Valor Requerido" : ""}
+              value={this.state.name}
+              onChange={this.changenameHandler}
+              error={this.state.name === ""}
+              helperText={this.state.name === "" ? "Valor Requerido" : ""}
             />
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              className={classes.textfield}
-              margin="dense"
-              label="Subtítulo"
-              type="text"
-              fullWidth
-              value={this.state.subtitle}
-              onChange={this.changeSubtitleHandler}
+          {/* image */}
+          <div className={classes.imagefield}>
+            <input
+              accept="image/*"
+              onChange={this.changeImageHandler}
+              className={classes.input}
+              id="contained-button-file"
+              type="file"
+              multiple={true}
             />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            {/* image */}
-            <div className={classes.imagefield}>
-              <input
-                accept="image/*"
-                onChange={this.changeImageHandler}
-                className={classes.input}
-                id="contained-button-file"
-                type="file"
-              />
-              <label htmlFor="contained-button-file">
-                <Button
-                  variant="contained"
-                  component="span"
-                  className={classes.button}
-                >
-                  Subir Imagen
+            <label htmlFor="contained-button-file">
+              <Button
+                variant="contained"
+                component="span"
+                className={classes.button}
+              >
+                Subir Imagenes
                 </Button>
-              </label>
-
-              {this.state.imageLink && <div className={classes.imgContainer}>
+            </label>
+            <Grid item xs={4} md={10}>
+              {this.state.imageLinks && <div className={classes.imgContainer}>
                 {this.state.uploadingImage ?
                   <Spinner></Spinner> :
-                  <img height={100} src={this.state.imageLink} alt="blog main"></img>}
+                  this.state.imageLinks.map(imageLink => (
+                    <img height={100} key={imageLink} className={classes.img}
+                      src={imageLink} alt="producto">
+                    </img>)
+                  )
+                }
               </div>}
-            </div>
-          </Grid>
+            </Grid>
+          </div>
 
           <Grid item xs={12}>
             <TextField
@@ -233,7 +223,7 @@ export class Form extends Component {
             Guardar
         </Button>
         </Grid>
-      </form>
+      </form >
     );
   }
 }
