@@ -14,6 +14,7 @@ import BlogFormPage from "./pages/Blog/BlogForm";
 import CategoryPage from "./pages/Category/Category";
 import SubcategoryPage from "./pages/Subcategory/Subcategory";
 import NewsletterPage from "./pages/Newsletter/Newsletter";
+import ProductPage from "./pages/Product/Product";
 
 //Providers and context
 import { ApolloProvider } from "react-apollo";
@@ -72,6 +73,7 @@ class App extends Component {
                   <Route path="/subcategory" component={SubcategoryPage} />
                   <Route path="/newsletter" component={NewsletterPage} />
                   <Route path="/auth" component={AuthPage} />
+                  <Route path="/product" component={ProductPage} />
                   <Redirect to="/category" exact />
                 </Switch>
               </React.Fragment>

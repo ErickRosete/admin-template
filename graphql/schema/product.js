@@ -7,7 +7,7 @@ const productDef = `
     }
 
     input ProductInput{
-        name: String!
+        name: String
         description: String
         subcategories: [ID]
     }
