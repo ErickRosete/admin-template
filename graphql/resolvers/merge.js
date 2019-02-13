@@ -82,11 +82,11 @@ const createAddress = async (args, req) => {
     console.log("creando address")
     console.log(args)
     const address = Address({
-        ...args.addressInput,
+        ...args,
     });
     try {
         const result = await address.save();
-        return { ...result._doc };
+        return  result._doc._id ;
     } catch (err) {
         throw err;
     }

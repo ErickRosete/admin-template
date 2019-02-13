@@ -15,7 +15,7 @@ const userDef = `
         password: String
         birthdate: String
         mainAddress: AddressInput
-        addresses: [AddressInput]
+        addresses: [ID]
     }
 `;
 
