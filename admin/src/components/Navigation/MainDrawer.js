@@ -49,7 +49,8 @@ const ResponsiveDrawer = props => {
     { id: 2, icon: <EventIcon />, text: "Newsletter", linkTo: "/newsletter" },
     { id: 3, icon: <EventIcon />, text: "Categorias", linkTo: "/category" },
     { id: 4, icon: <EventIcon />, text: "Subcategorias", linkTo: "/subcategory" },
-    { id: 5, icon: <EventIcon />, text: "Productos", linkTo: "/product" }
+    { id: 5, icon: <EventIcon />, text: "Productos", linkTo: "/product" },
+    { id: 6, icon: <EventIcon />, text: "Direcciones", linkTo: "/address" }
   ];
 
   const { classes, theme } = props;

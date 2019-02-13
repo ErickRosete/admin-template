@@ -15,7 +15,8 @@ import CategoryPage from "./pages/Category/Category";
 import SubcategoryPage from "./pages/Subcategory/Subcategory";
 import NewsletterPage from "./pages/Newsletter/Newsletter";
 import ProductPage from "./pages/Product/Product";
-
+import AddressPage from "./pages/Address/Address";
+import AddressFormPage from "./pages/Address/Form/AddressForm";
 //Providers and context
 import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
@@ -74,6 +75,8 @@ class App extends Component {
                   <Route path="/newsletter" component={NewsletterPage} />
                   <Route path="/auth" component={AuthPage} />
                   <Route path="/product" component={ProductPage} />
+                  <Route path="/address/edit/:id" component={AddressFormPage} />
+                  <Route path="/address" component={AddressPage} />
                   <Redirect to="/category" exact />
                 </Switch>
               </React.Fragment>
