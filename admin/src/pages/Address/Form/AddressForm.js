@@ -31,21 +31,26 @@ export class AddressFormPage extends Component {
                 <h1>hola mundo</h1>
             </div>
             {/* <Query query={GET_ADDRESS} variables={{ id: this.props.match.params.id }}> */}
-            <Query query={GET_ADDRESS}>
+            <Query query={GET_ADDRESS} variables={{ id: this.props.match.params.id }}>
             {({ loading, error, data }) => {
-            if (loading) return <Spinner />;
-            if (error) return <p>Error :(</p>;
-            console.log(data)
-            return (
-                <Form
-                    blogEntry={data.blogEntry}
-                    onSubmit={blogEntry => {
-                    // updateBlogEntry({
-                    //     variables: { ...blogEntry }
-                    // });
-                    this.setState({ return: true })
-                    }}
-                />
+                console.log( this.props.match.params.id)
+                if (loading) return <Spinner />;
+                if (error) return <p>Error :(</p>;
+                console.log(this.props)
+                console.log(data)
+                return (
+                    <div>
+                        {/* <p>{data.address.street}</p> */}
+                        <Form
+                            address={data.address}
+                            onSubmit={blogEntry => {
+                            // updateBlogEntry({
+                            //     variables: { ...blogEntry }
+                            // });
+                            this.setState({ return: true })
+                            }}
+                        />
+                    </div>
                 )
             }}
             </Query>
