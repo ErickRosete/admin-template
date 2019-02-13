@@ -2,12 +2,16 @@ const productDef = `
     type Product {
         _id: ID!
         name: String!
+        imageLinks: [String]
+        shortDescription: String
         description: String
         subcategories: [Subcategory]
     }
 
     input ProductInput{
         name: String
+        imageLinks: [String]
+        shortDescription: String
         description: String
         subcategories: [ID]
     }

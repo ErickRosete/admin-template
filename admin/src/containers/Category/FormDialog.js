@@ -65,10 +65,10 @@ export class FormDialog extends Component {
         onClose={this.props.handleClose}
         aria-labelledby="form-category-dialog"
       >
-        {this.props.category ?
-          <DialogTitle id="form-category-dialog">Editar Categoria</DialogTitle> :
-          <DialogTitle id="form-category-dialog">Añadir Categoria</DialogTitle>}
-          
+        <DialogTitle id="form-category-dialog">
+          {this.props.category ? "Editar Categoria" : "Añadir Categoria"}
+        </DialogTitle>
+
         <DialogContent>
           <TextField
             required
