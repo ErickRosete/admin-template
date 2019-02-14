@@ -7,8 +7,15 @@ import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
+// npm i google-map-react
+// Run  npm update handlebars --depth 6  to resolve 1 vulnerability
+// wow http://google-map-react.github.io/google-map-react/map/balderdash
+import MyGreatPlaceWithHover from './my_great_place_with_hover.jsx';
+// npm i react-pure-render
+import GoogleMapReact from 'google-map-react';
 
-const placesScript = "https://maps.googleapis.com/maps/api/js?key=AIzaSyC0OyV5AleQHaNYkrwPC8q2DegYgSagb5E&libraries=places&callback=initMap"
+const key="AIzaSyC0OyV5AleQHaNYkrwPC8q2DegYgSagb5E";
+const placesScript = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initMap`
 const styles = theme => ({
     address: {
         display: 'flex',
@@ -52,25 +59,26 @@ export class Form extends Component {
         geocodeByAddress(address)
             .then(results => {
                 console.log(results)
-                    getLatLng(results[0])
-                    // let country=this.locateString("country",results)
-                    // let zip=this.locateString("postal_code",results)
-                    // let street=this.locateString("street_number",results)
-                    // let state=this.locateString("administrative_area_level_1",results)
-                    // let city=this.locateString("locality",results)
-                    // let calle=this.locateString("route",results) 
-                    // json={
-                    //     country:results[0].address_components[country].long_name,
-                    //     state:results[0].address_components[state].long_name,
-                    //     city:results[0].address_components[city].long_name,
-                    //     zipCode:results[0].address_components[zip].long_name,
-                    //     streetNumber:results[0].address_components[street].long_name,
-                    //     calle:results[0].address_components[calle].long_name,
-                    // }
+                let latLng=getLatLng(results[0])
+                let country=this.locateString("country",results)
+                let zip=this.locateString("postal_code",results)
+                let street=this.locateString("street_number",results)
+                let state=this.locateString("administrative_area_level_1",results)
+                let city=this.locateString("locality",results)
+                let calle=this.locateString("route",results) 
+                json={
+                    country:results[0].address_components[country].long_name,
+                    state:results[0].address_components[state].long_name,
+                    city:results[0].address_components[city].long_name,
+                    zipCode:results[0].address_components[zip].long_name,
+                    streetNumber:results[0].address_components[street].long_name,
+                    calle:results[0].address_components[calle].long_name,
+                }
+                return latLng
                 }
             )
             .then(latLng => {
-                // json.LatLng=latLng
+                json.LatLng=latLng
                 console.log(json)
                 console.log('Success', latLng)
             })
@@ -96,18 +104,6 @@ export class Form extends Component {
         gmapScriptEl.src = placesScript
         gmapScriptEl.async = true
         document.querySelector(`body`).insertAdjacentElement(`beforeend`, gmapScriptEl)
-        // if(!this.state.scriptLoaded){
-        //     if (typeof window !== "undefined" && window !== null) {
-        //         const script = document.createElement("script");
-        //         script.src = placesScript;
-        //         script.async = false;
-        //         document.body.appendChild(script);
-        //         console.log("============loading")
-        //         this.setState({
-        //             scriptLoaded:true
-        //         })
-        //     } 
-        // }
     }
 
     //great
@@ -178,7 +174,17 @@ export class Form extends Component {
                     </PlacesAutocomplete>
                 }
 
-
+                <GoogleMapReact
+                    //  bootstrapURLKeys={{ key: key }}
+                     defaultCenter={this.props.center}
+                     defaultZoom={this.props.zoom}
+                >
+                    <MyGreatPlaceWithHover  
+                        lat={59.955413}
+                        lng={30.337844}
+                        text={'Kreyser Avrora'}
+                    />
+                </GoogleMapReact>
                 <Grid item xs={12}>
                     <p>{this.state.address}</p>
                     <TextField
