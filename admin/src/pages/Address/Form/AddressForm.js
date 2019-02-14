@@ -27,9 +27,6 @@ export class AddressFormPage extends Component {
       const classes = this.props.classes;
       return (
           <Layout title="Edicion de direcciones">
-            <div className={classes.address}>
-                <h1>hola mundo</h1>
-            </div>
             {/* <Query query={GET_ADDRESS} variables={{ id: this.props.match.params.id }}> */}
             <Query query={GET_ADDRESS} variables={{ id: this.props.match.params.id }}>
             {({ loading, error, data }) => {
@@ -41,6 +38,9 @@ export class AddressFormPage extends Component {
                 return (
                     <div>
                         {/* <p>{data.address.street}</p> */}
+                        <div className={classes.address}>
+                            <h1>Formulario modificacion direccion {data.address.street}</h1>
+                        </div>
                         <Form
                             address={data.address}
                             onSubmit={blogEntry => {

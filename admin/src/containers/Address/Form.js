@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
+
 import Grid from '@material-ui/core/Grid';
 import PlacesAutocomplete, {
     geocodeByAddress,
@@ -14,7 +20,7 @@ import MyGreatPlaceWithHover from './my_great_place_with_hover.jsx';
 // npm i react-pure-render
 import GoogleMapReact from 'google-map-react';
 
-const key="AIzaSyC0OyV5AleQHaNYkrwPC8q2DegYgSagb5E";
+const key = "AIzaSyC0OyV5AleQHaNYkrwPC8q2DegYgSagb5E";
 const placesScript = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initMap`
 const styles = theme => ({
     address: {
@@ -27,22 +33,28 @@ const styles = theme => ({
     },
     linea: {
         display: 'flex'
+    },
+    mybaby:{
+        width:"100%"
     }
 });
 
 export class Form extends Component {
-    static defaultProps = {
-        center: [59.938043, 30.337157],
-        zoom: 9,
-        greatPlaceCoords: {lat: 59.724465, lng: 30.080121}
-    };
+    // static defaultProps = {
+    //     center: [59.938043, 30.337157],
+    //     zoom: 15,
+    //     greatPlaceCoords: { lat: 59.724465, lng: 30.080121 }
+    // };
 
     constructor(props) {
         super(props);
 
-        this.state = { 
-            address: '', 
-            scriptLoaded: false 
+        this.state = {
+            address: '',
+            scriptLoaded: false,
+            center: [59.938043, 30.337157],
+            zoom: 15,
+            greatPlaceCoords: { lat: 59.724465, lng: 30.080121 }
         };
     }
 
@@ -50,12 +62,11 @@ export class Form extends Component {
         this.setState({ address });
     };
 
-    locateString=(param,results)=>{
+    locateString = (param, results) => {
         var found = results[0].address_components.findIndex((element) => {
-            return element.types.find(type => 
-                { 
-                    return type === param 
-                }
+            return element.types.find(type => {
+                return type === param
+            }
             );
         })
         // console.log(found);
@@ -64,32 +75,51 @@ export class Form extends Component {
 
     handleSelect = address => {
         console.log("selected")
+        console.log(address)
+        this.setState({address})
         let json;
         geocodeByAddress(address)
             .then(results => {
                 console.log(results)
-                let latLng=getLatLng(results[0])
-                let country=this.locateString("country",results)
-                let zip=this.locateString("postal_code",results)
-                let street=this.locateString("street_number",results)
-                let state=this.locateString("administrative_area_level_1",results)
-                let city=this.locateString("locality",results)
-                let calle=this.locateString("route",results) 
-                json={
-                    country:results[0].address_components[country].long_name,
-                    state:results[0].address_components[state].long_name,
-                    city:results[0].address_components[city].long_name,
-                    zipCode:results[0].address_components[zip].long_name,
-                    streetNumber:results[0].address_components[street].long_name,
-                    calle:results[0].address_components[calle].long_name,
+                //ternarys pendientes de validacion
+                let latLng = getLatLng(results[0])
+                let country; const countryInd = this.locateString("country", results)
+                country = countryInd > -1 ? results[0].address_components[countryInd].long_name : ""
+                let zip; const zipInd = this.locateString("postal_code", results)
+                zip = zipInd > -1 ? results[0].address_components[zipInd].long_name : ""
+                let street; const streetInd = this.locateString("street_number", results)
+                street = streetInd > -1 ? results[0].address_components[streetInd].long_name : ""
+                let state; const stateInd = this.locateString("administrative_area_level_1", results)
+                state = stateInd > -1 ? results[0].address_components[stateInd].long_name : ""
+                let city; const cityInd = this.locateString("locality", results)
+                city = cityInd > -1 ? results[0].address_components[cityInd].long_name : ""
+                let calle; const calleInd = this.locateString("route", results)
+                calle = calleInd > -1 ? results[0].address_components[calleInd].long_name : ""
+                json = {
+                    country: country,
+                    state: state,
+                    city: city,
+                    zipCode: zip,
+                    streetNumber: street,
+                    calle: calle,
                 }
                 return latLng
-                }
+            }
             )
             .then(latLng => {
-                json.LatLng=latLng
+                json.LatLng = latLng
+                console.log(latLng)
+                let centerlat=latLng.lat
+                let centerlng=latLng.lng
+
                 console.log(json)
                 console.log('Success', latLng)
+                this.setState({
+                    center:[centerlat, centerlng],
+                    // center:[49.938043, 20.337157],
+                    zoom:15,
+                    greatPlaceCoords: latLng
+                })
             })
             .catch(error => console.error('Error', error));
     };
@@ -126,91 +156,96 @@ export class Form extends Component {
     //         .catch(error => console.error('Error', error));
     // }
 
-    changeDirectionHandler = event => {
+    changeDirectionHandler = (metodo,suggestions,event)=> {
         // this.setState({
         //     title: event.target.value
         // });
         // const address = event.target.value
+        console.log(event.target.value)
+        console.log(metodo(event.target.value))
+        console.log(suggestions)
         this.setState({ address: event.target.value })
         // this.handleAddress();
     };
 
     render() {
-        const classes = this.props.classes;
+        // const classes = this.props.classes;
         return (
             <div>
-                <p>Formulario modificacion direccion {this.props.address.street}</p>
                 {this.state.scriptLoaded &&
                     <div>
+                        {/* <p>Formulario modificacion direccion {this.props.address.street}</p> */}
                         <PlacesAutocomplete
-                        value={this.state.address}
-                        onChange={this.handleChange}
-                        onSelect={this.handleSelect}
+                            value={this.state.address}
+                            onChange={this.handleChange}
+                            onSelect={this.handleSelect}
                         >
                             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                                 <div>
-                                    <input
-                                        {...getInputProps({
-                                            placeholder: 'Search Places ...',
-                                            className: 'location-search-input',
-                                        })}
-                                    />
-
-                                    <div className="autocomplete-dropdown-container">
-                                        {loading && <div>Loading...</div>}
-                                        {suggestions.map(suggestion => {
-                                            const className = suggestion.active
-                                                ? 'suggestion-item--active'
-                                                : 'suggestion-item';
-                                            // inline style for demonstration purpose
-                                            const style = suggestion.active
-                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                            return (
-                                                <div
-                                                    {...getSuggestionItemProps(suggestion, {
-                                                        className,
-                                                        style,
-                                                    })}
-                                                >
-                                                    <span>{suggestion.description}</span>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-
+                                    <Grid item xs={12}>
+                                        {/* <p>{this.state.address}</p> */}
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="my-input">Direccion</InputLabel>
+                                            {/* <Input id="my-input" aria-describedby="my-helper-text" /> */}
+                                            <Input
+                                                id="my-input"
+                                                aria-describedby="my-helper-text"
+                                                inputProps={{
+                                                'aria-label': 'Description',
+                                                }}
+                                                {...getInputProps({
+                                                    placeholder: 'Search Places ...',
+                                                    className: 'location-search-input',
+                                                })}
+                                                // onChange={this.changeDirectionHandler.bind(this,getInputProps,suggestions)}
+                                            />
+                                            <FormHelperText id="my-helper-text">Nunca compartiremos tu direccion</FormHelperText>
+                                        </FormControl>
+                                        <div className="autocomplete-dropdown-container">
+                                            {loading && <div>Loading...</div>}
+                                            {suggestions.map(suggestion => {
+                                                // console.log(suggestions)
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                // inline style for demonstration purpose
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                return (
+                                                    <div
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                    >
+                                                        <span>{suggestion.description}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </Grid>
                                 </div>
                             )}
                         </PlacesAutocomplete>
-                        <GoogleMapReact
-                            bootstrapURLKeys={{ key: key }}
-                            defaultCenter={this.props.center}
-                            defaultZoom={this.props.zoom}
-                        >
-                            <MyGreatPlaceWithHover  
-                                // lat={59.955413}
-                                // lng={30.337844}
-                                {...this.props.greatPlaceCoords} 
-                                text={'Kreyser Avrora'}
-                            />
-                        </GoogleMapReact>
-                    </div>
-                    
-                }
+                        <div style={{ height: '50vh', width: '100%' }}>
+                            <GoogleMapReact
+                                bootstrapURLKeys={{ key: key }}
+                                center={this.state.center}
+                                defaultZoom={this.state.zoom}
+                            >
+                                <MyGreatPlaceWithHover
+                                    // lat={59.955413}
+                                    // lng={30.337844}
+                                    {...this.state.greatPlaceCoords} 
+                                    text={'G'}
+                                />
+                            </GoogleMapReact>
+                        </div>
 
-                
-                <Grid item xs={12}>
-                    <p>{this.state.address}</p>
-                    <TextField
-                        className={classes.textfield}
-                        margin="dense"
-                        label="Direccion"
-                        type="text"
-                        fullWidth
-                        // value={this.state.shortDescription}
-                        onChange={this.changeDirectionHandler}
-                    />
-                </Grid>
+                    </div>
+
+                }
             </div>
         )
     }
