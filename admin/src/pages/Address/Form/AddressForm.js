@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
 import Spinner from "../../../components/Spinner/Spinner"
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import { GET_ADDRESS } from "../constants";
 
 const styles = theme => ({

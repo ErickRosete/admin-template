@@ -29,12 +29,21 @@ const styles = theme => ({
         display: 'flex'
     }
 });
+
 export class Form extends Component {
+    static defaultProps = {
+        center: [59.938043, 30.337157],
+        zoom: 9,
+        greatPlaceCoords: {lat: 59.724465, lng: 30.080121}
+    };
 
     constructor(props) {
         super(props);
 
-        this.state = { address: '', scriptLoaded: false };
+        this.state = { 
+            address: '', 
+            scriptLoaded: false 
+        };
     }
 
     handleChange = address => {
@@ -45,7 +54,7 @@ export class Form extends Component {
         var found = results[0].address_components.findIndex((element) => {
             return element.types.find(type => 
                 { 
-                    return type == param 
+                    return type === param 
                 }
             );
         })
@@ -121,7 +130,7 @@ export class Form extends Component {
         // this.setState({
         //     title: event.target.value
         // });
-        const address = event.target.value
+        // const address = event.target.value
         this.setState({ address: event.target.value })
         // this.handleAddress();
     };
@@ -132,59 +141,64 @@ export class Form extends Component {
             <div>
                 <p>Formulario modificacion direccion {this.props.address.street}</p>
                 {this.state.scriptLoaded &&
-                    <PlacesAutocomplete
+                    <div>
+                        <PlacesAutocomplete
                         value={this.state.address}
                         onChange={this.handleChange}
                         onSelect={this.handleSelect}
-                    >
-                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                            <div>
-                                <input
-                                    {...getInputProps({
-                                        placeholder: 'Search Places ...',
-                                        className: 'location-search-input',
-                                    })}
-                                />
+                        >
+                            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <input
+                                        {...getInputProps({
+                                            placeholder: 'Search Places ...',
+                                            className: 'location-search-input',
+                                        })}
+                                    />
 
-                                <div className="autocomplete-dropdown-container">
-                                    {loading && <div>Loading...</div>}
-                                    {suggestions.map(suggestion => {
-                                        const className = suggestion.active
-                                            ? 'suggestion-item--active'
-                                            : 'suggestion-item';
-                                        // inline style for demonstration purpose
-                                        const style = suggestion.active
-                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                        return (
-                                            <div
-                                                {...getSuggestionItemProps(suggestion, {
-                                                    className,
-                                                    style,
-                                                })}
-                                            >
-                                                <span>{suggestion.description}</span>
-                                            </div>
-                                        );
-                                    })}
+                                    <div className="autocomplete-dropdown-container">
+                                        {loading && <div>Loading...</div>}
+                                        {suggestions.map(suggestion => {
+                                            const className = suggestion.active
+                                                ? 'suggestion-item--active'
+                                                : 'suggestion-item';
+                                            // inline style for demonstration purpose
+                                            const style = suggestion.active
+                                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                            return (
+                                                <div
+                                                    {...getSuggestionItemProps(suggestion, {
+                                                        className,
+                                                        style,
+                                                    })}
+                                                >
+                                                    <span>{suggestion.description}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
                                 </div>
-
-                            </div>
-                        )}
-                    </PlacesAutocomplete>
+                            )}
+                        </PlacesAutocomplete>
+                        <GoogleMapReact
+                            bootstrapURLKeys={{ key: key }}
+                            defaultCenter={this.props.center}
+                            defaultZoom={this.props.zoom}
+                        >
+                            <MyGreatPlaceWithHover  
+                                // lat={59.955413}
+                                // lng={30.337844}
+                                {...this.props.greatPlaceCoords} 
+                                text={'Kreyser Avrora'}
+                            />
+                        </GoogleMapReact>
+                    </div>
+                    
                 }
 
-                <GoogleMapReact
-                    //  bootstrapURLKeys={{ key: key }}
-                     defaultCenter={this.props.center}
-                     defaultZoom={this.props.zoom}
-                >
-                    <MyGreatPlaceWithHover  
-                        lat={59.955413}
-                        lng={30.337844}
-                        text={'Kreyser Avrora'}
-                    />
-                </GoogleMapReact>
+                
                 <Grid item xs={12}>
                     <p>{this.state.address}</p>
                     <TextField

@@ -16,9 +16,9 @@ export default class MyGreatPlaceWithHover extends Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   render() {
     const style = this.props.$hover ? greatPlaceStyleHover : greatPlaceStyle;

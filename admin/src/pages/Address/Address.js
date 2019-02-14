@@ -3,9 +3,9 @@ import Layout from "../../containers/Layout/Layout"
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { GET_ADDRESSES, DELETE_BLOGENTRY } from "./constants";
+import { GET_ADDRESSES } from "./constants";
 
 //Route
 import Link from "react-router-dom/Link";
@@ -13,8 +13,6 @@ import Link from "react-router-dom/Link";
 //Buttons
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AddIcon from "@material-ui/icons/Add";
 
 const styles = theme => ({
     address: {
