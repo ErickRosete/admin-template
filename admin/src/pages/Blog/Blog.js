@@ -24,8 +24,8 @@ import { GET_BLOG, DELETE_BLOGENTRY } from "./constants";
 
 const styles = theme => ({
   fab: {
-    position: "absolute",
-    top: theme.mixins.toolbar.minHeight + theme.spacing.unit * 3,
+    position: "fixed",
+    bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2
   }
 });

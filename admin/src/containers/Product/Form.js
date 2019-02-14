@@ -1,5 +1,3 @@
-
-
 import React, { Component } from "react";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -18,7 +16,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 
 export class Form extends Component {
   constructor(props) {
@@ -32,7 +30,9 @@ export class Form extends Component {
     if (props.product) {
       console.log(props.product);
       name = props.product.name ? props.product.name : "";
-      shortDescription = props.product.shortDescription ? props.product.shortDescription : "";
+      shortDescription = props.product.shortDescription
+        ? props.product.shortDescription
+        : "";
       imageLinks = props.product.imageLinks ? props.product.imageLinks : [""];
       //editor
       const html = props.product.description;
@@ -55,7 +55,7 @@ export class Form extends Component {
       shortDescription,
       editorState,
       imageLinks,
-      uploadingImages: false,
+      uploadingImages: false
     };
   }
 
@@ -89,7 +89,7 @@ export class Form extends Component {
     var formData = new FormData();
     Array.from(event.target.files).forEach(image => {
       formData.append("files", image);
-    })
+    });
 
     // headers: { "Content-Type": "multipart/form-data" },
     fetch(`http://localhost:5000/uploadImages`, {
@@ -110,7 +110,7 @@ export class Form extends Component {
         this.setState({ uploadingImages: false });
         console.log(err);
       });
-  }
+  };
 
   onSubmitHandler = event => {
     event.preventDefault();
@@ -122,7 +122,7 @@ export class Form extends Component {
 
     let product = {
       name,
-      imageLink: this.state.imageLink,
+      imageLinks: this.state.imageLinks,
       shortDescription: this.state.shortDescription,
       description: draftToHtml(
         convertToRaw(this.state.editorState.getCurrentContent())
@@ -132,7 +132,6 @@ export class Form extends Component {
     if (this.props.product) {
       product = { id: this.props.product._id, ...product };
     }
-
     this.props.onSubmit(product);
   };
 
@@ -140,7 +139,7 @@ export class Form extends Component {
     const { classes } = this.props;
     return (
       <form className="product-form" onSubmit={this.onSubmitHandler}>
-        <Grid container spacing={24}>
+        <Grid container spacing={24} justify="center">
           <Grid item xs={12}>
             <TextField
               required
@@ -158,37 +157,45 @@ export class Form extends Component {
           </Grid>
 
           {/* image */}
-          <div className={classes.imagefield}>
-            <input
-              accept="image/*"
-              onChange={this.changeImageHandler}
-              className={classes.input}
-              id="contained-button-file"
-              type="file"
-              multiple={true}
-            />
-            <label htmlFor="contained-button-file">
-              <Button
-                variant="contained"
-                component="span"
-                className={classes.button}
-              >
-                Subir Imagenes
+          <Grid item xs={12}>
+            <div className={classes.center}>
+              <input
+                accept="image/*"
+                onChange={this.changeImageHandler}
+                className={classes.input}
+                id="contained-button-file"
+                type="file"
+                multiple={true}
+              />
+              <label htmlFor="contained-button-file">
+                <Button
+                  variant="contained"
+                  component="span"
+                  className={classes.button}
+                >
+                  Subir Imagenes
                 </Button>
-            </label>
-            <Grid item xs={4} md={10}>
-              {this.state.imageLinks && <div className={classes.imgContainer}>
-                {this.state.uploadingImage ?
-                  <Spinner></Spinner> :
-                  this.state.imageLinks.map(imageLink => (
-                    <img height={100} key={imageLink} className={classes.img}
-                      src={imageLink} alt="producto">
-                    </img>)
-                  )
-                }
-              </div>}
-            </Grid>
-          </div>
+              </label>
+
+              {this.state.imageLinks && (
+                <div className={classes.imgContainer}>
+                  {this.state.uploadingImage ? (
+                    <Spinner />
+                  ) : (
+                    this.state.imageLinks.map(imageLink => (
+                      <img
+                        height={100}
+                        key={imageLink}
+                        className={classes.img}
+                        src={imageLink}
+                        alt="producto"
+                      />
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          </Grid>
 
           <Grid item xs={12}>
             <TextField
@@ -209,7 +216,7 @@ export class Form extends Component {
                 error={!this.state.editorState.getCurrentContent().hasText()}
               >
                 Contenido del blog
-          </FormLabel>
+              </FormLabel>
               <Editor
                 editorState={this.state.editorState}
                 wrapperClassName={classes.wrapper}
@@ -221,9 +228,9 @@ export class Form extends Component {
 
           <Button type="submit" variant="contained" color="primary" autoFocus>
             Guardar
-        </Button>
+          </Button>
         </Grid>
-      </form >
+      </form>
     );
   }
 }
