@@ -12,6 +12,8 @@ const productSchema = new Schema(
             type: String,
             required: true
         },
+        imageLinks: [String],
+        shortDescription: String,
         quantity: Number,
         subcategories: [{
             type: Schema.Types.ObjectId,

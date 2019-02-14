@@ -8,7 +8,7 @@ export const GET_PRODUCT = gql`
       imageLinks
       shortDescription
       description
-      subcategories{
+      subcategories {
         _id
         name
       }
@@ -24,7 +24,7 @@ export const GET_PRODUCTS = gql`
       imageLinks
       shortDescription
       description
-      subcategories{
+      subcategories {
         _id
         name
       }
@@ -35,7 +35,7 @@ export const GET_PRODUCTS = gql`
 export const ADD_PRODUCT = gql`
   mutation CreateProduct(
     $name: String
-    $imageLinks: String
+    $imageLinks: [String]
     $shortDescription: String
     $description: String
     $subcategories: [ID]
@@ -48,15 +48,16 @@ export const ADD_PRODUCT = gql`
         description: $description
         subcategories: $subcategories
       }
-    )     
-    _id
-    name
-    imageLinks
-    shortDescription
-    description
-    subcategories{
+    ) {
       _id
       name
+      imageLinks
+      shortDescription
+      description
+      subcategories {
+        _id
+        name
+      }
     }
   }
 `;
@@ -65,7 +66,7 @@ export const EDIT_PRODUCT = gql`
   mutation UpdateProduct(
     $id: ID!
     $name: String
-    $imageLinks: String
+    $imageLinks: [String]
     $shortDescription: String
     $description: String
     $subcategories: [ID]
@@ -79,15 +80,16 @@ export const EDIT_PRODUCT = gql`
         description: $description
         subcategories: $subcategories
       }
-    )     
-    _id
-    name
-    imageLinks
-    shortDescription
-    description
-    subcategories{
+    ) {
       _id
       name
+      imageLinks
+      shortDescription
+      description
+      subcategories {
+        _id
+        name
+      }
     }
   }
 `;

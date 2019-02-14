@@ -28,7 +28,7 @@ class ProductFormPage extends Component {
 
         {this.props.match.params.id ? (
           // Edit
-          <Query query={GET_PRODUCT} variables={{ id: this.id }}>
+          <Query query={GET_PRODUCT} variables={{ id: this.props.match.params.id }}>
             {({ loading, error, data }) => {
               if (loading) return <Spinner />;
               if (error) return <p>Error :( recarga la página!</p>;
@@ -37,14 +37,14 @@ class ProductFormPage extends Component {
                   mutation={EDIT_PRODUCT}
                   update={(cache, { data: { updateProduct } }) => {
                     const { products } = cache.readQuery({
-                      query: GET_PRODUCT
+                      query: GET_PRODUCTS
                     });
                     const editedProductIndex = products.findIndex(
                       product => product._id === updateProduct._id
                     );
                     products[editedProductIndex] = updateProduct;
                     cache.writeQuery({
-                      query: GET_PRODUCT,
+                      query: GET_PRODUCTS,
                       data: { products }
                     });
                   }}

@@ -2,16 +2,16 @@ const styles = theme => ({
   textfield: {
     margin: theme.spacing.unit
   },
-  imagefield: {
+  center: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
   },
   imgContainer: {
-    marginLeft: '1rem',
     display: 'flex',
+    maxWidth: '45vw',
     overflowX: 'auto',
+    overflowY: 'hidden'
   },
   img: {
     margin: theme.spacing.unit
