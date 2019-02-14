@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Spinner from "../../../components/Spinner/Spinner"
 import { Query } from "react-apollo";
 import { GET_ADDRESS } from "../constants";
-
+// https://snazzymaps.com/style/8097/wy
 const styles = theme => ({
     address: {
         display: 'flex',

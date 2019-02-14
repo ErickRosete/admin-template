@@ -69,7 +69,6 @@ export class Form extends Component {
             }
             );
         })
-        // console.log(found);
         return found;
     }
 
@@ -81,7 +80,6 @@ export class Form extends Component {
         geocodeByAddress(address)
             .then(results => {
                 console.log(results)
-                //ternarys pendientes de validacion
                 let latLng = getLatLng(results[0])
                 let country; const countryInd = this.locateString("country", results)
                 country = countryInd > -1 ? results[0].address_components[countryInd].long_name : ""
