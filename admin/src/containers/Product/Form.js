@@ -15,6 +15,7 @@ import styles from "./styles";
 import Spinner from "../../components/Spinner/Spinner";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import ReactPlayer from "react-player";
 
 import Grid from "@material-ui/core/Grid";
 
@@ -25,6 +26,7 @@ export class Form extends Component {
     let editorState;
     let name;
     let imageLinks;
+    let videoLink;
     let shortDescription;
 
     if (props.product) {
@@ -34,6 +36,8 @@ export class Form extends Component {
         ? props.product.shortDescription
         : "";
       imageLinks = props.product.imageLinks ? props.product.imageLinks : [""];
+      videoLink = props.product.videoLink ? props.produc.videoLink : "";
+
       //editor
       const html = props.product.description;
       const contentBlock = htmlToDraft(html);
@@ -47,6 +51,7 @@ export class Form extends Component {
       name = "";
       shortDescription = "";
       imageLinks = [""];
+      videoLink = "";
       editorState = EditorState.createEmpty();
     }
 
@@ -55,6 +60,7 @@ export class Form extends Component {
       shortDescription,
       editorState,
       imageLinks,
+      videoLink,
       uploadingImages: false
     };
   }
@@ -112,6 +118,12 @@ export class Form extends Component {
       });
   };
 
+  changeVideoLinkHandler = event => {
+    this.setState({
+      videoLink: event.target.value
+    });
+  };
+
   onSubmitHandler = event => {
     event.preventDefault();
 
@@ -123,6 +135,7 @@ export class Form extends Component {
     let product = {
       name,
       imageLinks: this.state.imageLinks,
+      videoLink: this.state.videoLink,
       shortDescription: this.state.shortDescription,
       description: draftToHtml(
         convertToRaw(this.state.editorState.getCurrentContent())
@@ -224,6 +237,31 @@ export class Form extends Component {
                 onEditorStateChange={this.onEditorStateChange}
               />
             </div>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              className={classes.textfield}
+              margin="dense"
+              label="Link de video"
+              type="text"
+              fullWidth
+              value={this.state.videoLink}
+              onChange={this.changeVideoLinkHandler}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            {this.state.videoLink && (
+              <div className={classes.playerWrapper}>
+                <ReactPlayer
+                  className={classes.reactPlayer}
+                  url={this.state.videoLink}
+                  width="100%"
+                  height="100%"
+                  controls
+                />
+              </div>
+            )}
           </Grid>
 
           <Button type="submit" variant="contained" color="primary" autoFocus>

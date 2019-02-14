@@ -5,6 +5,7 @@ const productDef = `
         imageLinks: [String]
         shortDescription: String
         description: String
+        videoLink: String
         subcategories: [Subcategory]
     }
 
@@ -13,6 +14,7 @@ const productDef = `
         imageLinks: [String]
         shortDescription: String
         description: String
+        videoLink: String
         subcategories: [ID]
     }
 `;
