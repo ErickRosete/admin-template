@@ -7,6 +7,9 @@ export const GET_CATEGORIES = gql`
       _id
       name
       description
+      subcategories {
+        _id
+      }
     }
   }
 `;
@@ -20,42 +23,48 @@ export const DELETE_CATEGORY = gql`
 `;
 
 export const EDIT_CATEGORY = gql`
-  mutation UpdateCategory($id: ID!, $name: String!, $description: String) {
+  mutation UpdateCategory($id: ID!, $name: String!, $description: String, $subcategories: [ID]) {
     updateCategory(
       id: $id
-      categoryInput: { name: $name, description: $description }
+      categoryInput: { name: $name, description: $description, subcategories: $subcategories }
     ) {
       _id
       name
       description
+      subcategories {
+        _id
+      }
     }
   }
 `;
 
 export const ADD_CATEGORY = gql`
-  mutation CreateCategory($name: String!, $description: String) {
-    createCategory(categoryInput: {name: $name, description: $description}) {
+  mutation CreateCategory($name: String!, $description: String, $subcategories: [ID]) {
+    createCategory(categoryInput: {name: $name, description: $description, subcategories: $subcategories}) {
       _id
       name
       description
+      subcategories {
+        _id
+      }
     }
   }
 `;
 
 //CSS
 export const styles = theme => ({
-    category: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignContent: 'center',
-        display: 'flex',
-    },
-    fab: {
-        position: "absolute",
-        bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 2
-    },
-    progress: {
-        margin: theme.spacing.unit * 2
-    },
+  category: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    display: 'flex',
+  },
+  fab: {
+    position: "absolute",
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
+  },
+  progress: {
+    margin: theme.spacing.unit * 2
+  },
 });

@@ -17,7 +17,11 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ReactPlayer from "react-player";
 
+import { Query } from "react-apollo"
+import Select from 'react-select';
+import InputLabel from '@material-ui/core/InputLabel';
 import Grid from "@material-ui/core/Grid";
+import { GET_SUBCATEGORIES } from "../../pages/Subcategory/constants";
 
 export class Form extends Component {
   constructor(props) {
@@ -28,6 +32,7 @@ export class Form extends Component {
     let imageLinks;
     let videoLink;
     let shortDescription;
+    let subcategories;
 
     if (props.product) {
       console.log(props.product);
@@ -35,8 +40,12 @@ export class Form extends Component {
       shortDescription = props.product.shortDescription
         ? props.product.shortDescription
         : "";
-      imageLinks = props.product.imageLinks ? props.product.imageLinks : [""];
-      videoLink = props.product.videoLink ? props.produc.videoLink : "";
+      imageLinks = props.product.imageLinks ? props.product.imageLinks : [];
+      videoLink = props.product.videoLink ? props.product.videoLink : "";
+
+      subcategories = props.product.subcategories ?
+        props.product.subcategories.map(subcategory => subcategory._id) :
+        [];
 
       //editor
       const html = props.product.description;
@@ -50,9 +59,10 @@ export class Form extends Component {
     } else {
       name = "";
       shortDescription = "";
-      imageLinks = [""];
+      imageLinks = [];
       videoLink = "";
       editorState = EditorState.createEmpty();
+      subcategories = [];
     }
 
     this.state = {
@@ -61,6 +71,7 @@ export class Form extends Component {
       editorState,
       imageLinks,
       videoLink,
+      subcategories,
       uploadingImages: false
     };
   }
@@ -124,6 +135,13 @@ export class Form extends Component {
     });
   };
 
+  changeSubcategoriesHandler = options => {
+    const subcategories = options.map(option => option.value);
+    this.setState({
+      subcategories
+    });
+  };
+
   onSubmitHandler = event => {
     event.preventDefault();
 
@@ -137,6 +155,7 @@ export class Form extends Component {
       imageLinks: this.state.imageLinks,
       videoLink: this.state.videoLink,
       shortDescription: this.state.shortDescription,
+      subcategories: this.state.subcategories,
       description: draftToHtml(
         convertToRaw(this.state.editorState.getCurrentContent())
       )
@@ -145,6 +164,7 @@ export class Form extends Component {
     if (this.props.product) {
       product = { id: this.props.product._id, ...product };
     }
+    console.log(product)
     this.props.onSubmit(product);
   };
 
@@ -195,16 +215,16 @@ export class Form extends Component {
                   {this.state.uploadingImage ? (
                     <Spinner />
                   ) : (
-                    this.state.imageLinks.map(imageLink => (
-                      <img
-                        height={100}
-                        key={imageLink}
-                        className={classes.img}
-                        src={imageLink}
-                        alt="producto"
-                      />
-                    ))
-                  )}
+                      this.state.imageLinks.map(imageLink => (
+                        <img
+                          height={100}
+                          key={imageLink}
+                          className={classes.img}
+                          src={imageLink}
+                          alt="producto"
+                        />
+                      ))
+                    )}
                 </div>
               )}
             </div>
@@ -220,6 +240,32 @@ export class Form extends Component {
               value={this.state.shortDescription}
               onChange={this.changeShortDescriptionHandler}
             />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Query query={GET_SUBCATEGORIES}>
+              {({ loading, error, data }) => {
+                if (loading) return <Spinner />;
+                if (error) return <p>Error :( recarga la página!</p>;
+
+                const options = data.subcategories.map(subcategory => {
+                  return ({ value: subcategory._id, label: subcategory.name });
+                })
+
+                return (
+                  <div className={classes.textfield}>
+                    <InputLabel shrink htmlFor="subcategories">Subcategorias</InputLabel>
+                    <Select
+                      id="subcategories"
+                      value={options.filter(option => this.state.subcategories.includes(option.value))}
+                      onChange={this.changeSubcategoriesHandler}
+                      options={options}
+                      isMulti
+                    />
+                  </div>
+                );
+              }}
+            </Query>
           </Grid>
 
           <Grid item xs={12}>
@@ -256,6 +302,13 @@ export class Form extends Component {
                 <ReactPlayer
                   className={classes.reactPlayer}
                   url={this.state.videoLink}
+                  config={{
+                    youtube: {
+                      playerVars: {
+                        origin: "http://localhost:3000",
+                      }
+                    }
+                  }}
                   width="100%"
                   height="100%"
                   controls

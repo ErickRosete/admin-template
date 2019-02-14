@@ -6,12 +6,11 @@ export const GET_PRODUCT = gql`
       _id
       name
       imageLinks
+      videoLink
       shortDescription
       description
-      videoLink
       subcategories {
         _id
-        name
       }
     }
   }
@@ -75,11 +74,17 @@ export const EDIT_PRODUCT = gql`
         description: $description
         subcategories: $subcategories
       }
-    ) {
-      _id
+    )      
+    {
+       _id
       name
       imageLinks
+      videoLink
       shortDescription
+      description
+      subcategories {
+        _id
+      }
     }
   }
 `;

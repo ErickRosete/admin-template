@@ -13,6 +13,7 @@ const productSchema = new Schema(
             required: true
         },
         imageLinks: [String],
+        videoLink: String,
         shortDescription: String,
         quantity: Number,
         subcategories: [{

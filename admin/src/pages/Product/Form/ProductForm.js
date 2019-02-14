@@ -33,22 +33,7 @@ class ProductFormPage extends Component {
               if (loading) return <Spinner />;
               if (error) return <p>Error :( recarga la página!</p>;
               return (
-                <Mutation
-                  mutation={EDIT_PRODUCT}
-                  update={(cache, { data: { updateProduct } }) => {
-                    const { products } = cache.readQuery({
-                      query: GET_PRODUCTS
-                    });
-                    const editedProductIndex = products.findIndex(
-                      product => product._id === updateProduct._id
-                    );
-                    products[editedProductIndex] = updateProduct;
-                    cache.writeQuery({
-                      query: GET_PRODUCTS,
-                      data: { products }
-                    });
-                  }}
-                >
+                <Mutation mutation={EDIT_PRODUCT} >
                   {updateProduct => (
                     <Form
                       product={data.product}
@@ -88,7 +73,8 @@ class ProductFormPage extends Component {
                 />
               )}
             </Mutation>
-          )}
+          )
+        }
       </Layout>
     );
   }

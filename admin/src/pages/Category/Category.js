@@ -27,7 +27,7 @@ export class CategoryPage extends Component {
     openDeleteDialog: false,
     openEditDialog: false,
     openAddDialog: false,
-    selectedCategory: { _id: ""},
+    selectedCategory: { _id: "" },
   };
 
   handleClickOpenDeleteDialog = category => {
