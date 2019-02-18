@@ -5,6 +5,7 @@ const { subcategoryDef, subcategoryQuery, subcategoryMutation } = require("./sub
 const { productDef, productQuery, productMutation } = require("./product");
 const { addressDef, addressQuery, addressMutation } = require("./address");
 const { userDef, userQuery, userMutation } = require("./user");
+const { shoppingCartDef, shoppingCartQuery, shoppingCartMutation } = require("./shopping-cart");
 
 module.exports = buildSchema(`
     ${blogEntryDef}
@@ -13,6 +14,7 @@ module.exports = buildSchema(`
     ${productDef}
     ${addressDef}
     ${userDef}
+    ${shoppingCartDef}
 
     type RootQuery {
         ${blogEntryQuery}
@@ -21,7 +23,7 @@ module.exports = buildSchema(`
         ${productQuery}
         ${addressQuery}
         ${userQuery}
-
+        ${shoppingCartQuery}
     }
 
     type RootMutation {
@@ -31,7 +33,7 @@ module.exports = buildSchema(`
         ${productMutation}
         ${addressMutation}
         ${userMutation}
-
+        ${shoppingCartMutation}
     }
 
     schema {

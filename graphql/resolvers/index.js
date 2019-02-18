@@ -4,15 +4,16 @@ const blogEntryResolver = require("./blog-entry");
 const productResolver = require("./product");
 const addressResolver = require("./address");
 const userResolver = require("./user");
+const shoppingCartResolver = require("./shopping-cart");
 
 const rootResolver = {
-    ...categoryResolver,
-    ...productResolver,
-    ...subcategoryResolver,
-    ...blogEntryResolver,
-    ...addressResolver,
-    ...userResolver
-
-}
+  ...categoryResolver,
+  ...productResolver,
+  ...subcategoryResolver,
+  ...blogEntryResolver,
+  ...addressResolver,
+  ...userResolver,
+  ...shoppingCartResolver
+};
 
 module.exports = rootResolver;
