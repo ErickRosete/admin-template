@@ -5,6 +5,7 @@ export const GET_PRODUCT = gql`
     product(id: $id) {
       _id
       name
+      price
       imageLinks
       videoLink
       shortDescription
@@ -21,6 +22,7 @@ export const GET_PRODUCTS = gql`
     products {
       _id
       name
+      price
       imageLinks
       shortDescription
     }
@@ -30,6 +32,7 @@ export const GET_PRODUCTS = gql`
 export const ADD_PRODUCT = gql`
   mutation CreateProduct(
     $name: String
+    $price: Float
     $imageLinks: [String]
     $videoLink: String
     $shortDescription: String
@@ -39,6 +42,7 @@ export const ADD_PRODUCT = gql`
     createProduct(
       productInput: {
         name: $name
+        price: $price
         videoLink: $videoLink
         imageLinks: $imageLinks
         shortDescription: $shortDescription
@@ -48,6 +52,7 @@ export const ADD_PRODUCT = gql`
     ) {
       _id
       name
+      price
       imageLinks
       shortDescription
     }
@@ -58,6 +63,7 @@ export const EDIT_PRODUCT = gql`
   mutation UpdateProduct(
     $id: ID!
     $name: String
+    $price: Float
     $imageLinks: [String]
     $videoLink: String
     $shortDescription: String
@@ -68,6 +74,7 @@ export const EDIT_PRODUCT = gql`
       id: $id
       productInput: {
         name: $name
+        price: $price
         imageLinks: $imageLinks
         videoLink: $videoLink
         shortDescription: $shortDescription
@@ -78,6 +85,7 @@ export const EDIT_PRODUCT = gql`
     {
        _id
       name
+      price
       imageLinks
       videoLink
       shortDescription

@@ -28,6 +28,7 @@ const shoppingCartQuery = `
     shoppingCarts: [ShoppingCart]
     shoppingCart(id: ID!): ShoppingCart
     shoppingCartByUser(id: ID!): ShoppingCart
+    shoppingCartProducts: [ShoppingCartProduct]
 `;
 
 const shoppingCartMutation = `

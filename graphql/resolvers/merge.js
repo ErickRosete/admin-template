@@ -15,7 +15,7 @@ const getUsers = async userIds => {
   try {
     const users = await User.find({ _id: { $in: userIds } });
     return users.map(user => {
-      return { ...user._doc };
+      return transformUser(user);
     });
   } catch (err) {
     throw err;
@@ -61,7 +61,7 @@ const getProducts = async productIds => {
   try {
     const products = await Product.find({ _id: { $in: productIds } });
     return products.map(product => {
-      return { ...product._doc };
+      return transformProduct(product);
     });
   } catch (err) {
     throw err;
@@ -86,7 +86,7 @@ const getShoppingCartProducts = async shoppingCartProductIds => {
       _id: { $in: shoppingCartProductIds }
     });
     return shoppingCartProducts.map(shoppingCartProduct => {
-      return { ...shoppingCartProduct._doc };
+      return transformShoppingCartProduct(shoppingCartProduct);
     });
   } catch (err) {
     throw err;
@@ -103,7 +103,7 @@ const getSubcategories = async subcategoryIds => {
       _id: { $in: subcategoryIds }
     });
     return subcategories.map(subcategory => {
-      return { ...subcategory._doc };
+      return transformSubcategory(subcategory);
     });
   } catch (err) {
     throw err;
@@ -129,7 +129,7 @@ const transformShoppingCartProduct = shoppingCartProduct => {
 const transformProduct = product => {
   return {
     ...product._doc,
-    subcategories: getAddress.bind(this, product.subcategories)
+    subcategories:  () => subcategoryLoader.loadMany(product._doc.subcategories)
   };
 };
 

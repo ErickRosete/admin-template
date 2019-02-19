@@ -1,5 +1,6 @@
 const ShoppingCart = require("../../models/shopping-cart");
 const ShoppingCartProduct = require("../../models/shopping-cart-product");
+const Product = require("../../models/product");
 
 const {
   transformShoppingCart,
@@ -29,6 +30,16 @@ module.exports = {
     try {
       const shoppingCart = await ShoppingCart.findOne({ user: args.id });
       return transformShoppingCart(shoppingCart);
+    } catch (err) {
+      throw err;
+    }
+  },
+  shoppingCartProducts: async () => {
+    try {
+      const shoppingCartProducts = await ShoppingCartProduct.find();
+      return shoppingCartProducts.map(shoppingCartProduct => {
+        return transformShoppingCartProduct(shoppingCartProduct);
+      });
     } catch (err) {
       throw err;
     }
@@ -80,6 +91,8 @@ module.exports = {
       );
       if (shoppingCartProduct) {
         shoppingCartProduct.quantity += 1;
+        await shoppingCartProduct.save();
+        return transformShoppingCart(shoppingCart);
       } else {
         const newShoppingCartProduct = ShoppingCartProduct({
           product: args.productId,
@@ -87,8 +100,9 @@ module.exports = {
         });
         const result = await newShoppingCartProduct.save();
         shoppingCart.shoppingCartProducts.push(result);
+        const resultShoppingCart = await shoppingCart.save();
+        return transformShoppingCart(resultShoppingCart);
       }
-      return transformShoppingCart(shoppingCart);
     } catch (err) {
       throw err;
     }
@@ -107,7 +121,7 @@ module.exports = {
   },
   deleteShoppingCartProduct: async args => {
     try {
-      const shoppingCartProduct = await shoppingCartProduct.findByIdAndDelete(
+      const shoppingCartProduct = await ShoppingCartProduct.findByIdAndDelete(
         args.id
       );
       return transformShoppingCartProduct(shoppingCartProduct);

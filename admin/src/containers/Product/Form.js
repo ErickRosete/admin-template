@@ -16,10 +16,11 @@ import Spinner from "../../components/Spinner/Spinner";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ReactPlayer from "react-player";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
-import { Query } from "react-apollo"
-import Select from 'react-select';
-import InputLabel from '@material-ui/core/InputLabel';
+import { Query } from "react-apollo";
+import Select from "react-select";
+import InputLabel from "@material-ui/core/InputLabel";
 import Grid from "@material-ui/core/Grid";
 import { GET_SUBCATEGORIES } from "../../pages/Subcategory/constants";
 
@@ -27,25 +28,27 @@ export class Form extends Component {
   constructor(props) {
     super(props);
 
-    let editorState;
-    let name;
-    let imageLinks;
-    let videoLink;
-    let shortDescription;
-    let subcategories;
+    let editorState = EditorState.createEmpty();
+    let name = "";
+    let price = 0;
+    let imageLinks = [];
+    let videoLink = "";
+    let shortDescription = "";
+    let subcategories = [];
 
     if (props.product) {
       console.log(props.product);
       name = props.product.name ? props.product.name : "";
+      price = props.product.price ? props.product.price : 0;
       shortDescription = props.product.shortDescription
         ? props.product.shortDescription
         : "";
       imageLinks = props.product.imageLinks ? props.product.imageLinks : [];
       videoLink = props.product.videoLink ? props.product.videoLink : "";
 
-      subcategories = props.product.subcategories ?
-        props.product.subcategories.map(subcategory => subcategory._id) :
-        [];
+      subcategories = props.product.subcategories
+        ? props.product.subcategories.map(subcategory => subcategory._id)
+        : [];
 
       //editor
       const html = props.product.description;
@@ -56,17 +59,11 @@ export class Form extends Component {
         );
         editorState = EditorState.createWithContent(contentState);
       }
-    } else {
-      name = "";
-      shortDescription = "";
-      imageLinks = [];
-      videoLink = "";
-      editorState = EditorState.createEmpty();
-      subcategories = [];
     }
 
     this.state = {
       name,
+      price,
       shortDescription,
       editorState,
       imageLinks,
@@ -82,9 +79,15 @@ export class Form extends Component {
     });
   };
 
-  changenameHandler = event => {
+  changeNameHandler = event => {
     this.setState({
       name: event.target.value
+    });
+  };
+
+  changePriceHandler = event => {
+    this.setState({
+      price: +event.target.value
     });
   };
 
@@ -146,12 +149,15 @@ export class Form extends Component {
     event.preventDefault();
 
     const name = this.state.name;
-    if (name === "") {
+    const price = this.state.price;
+
+    if (name === "" || price < 0) {
       return;
     }
 
     let product = {
       name,
+      price,
       imageLinks: this.state.imageLinks,
       videoLink: this.state.videoLink,
       shortDescription: this.state.shortDescription,
@@ -164,7 +170,7 @@ export class Form extends Component {
     if (this.props.product) {
       product = { id: this.props.product._id, ...product };
     }
-    console.log(product)
+    console.log(product);
     this.props.onSubmit(product);
   };
 
@@ -173,7 +179,7 @@ export class Form extends Component {
     return (
       <form className="product-form" onSubmit={this.onSubmitHandler}>
         <Grid container spacing={24} justify="center">
-          <Grid item xs={12}>
+          <Grid item xs={8}>
             <TextField
               required
               autoFocus
@@ -183,9 +189,35 @@ export class Form extends Component {
               type="text"
               fullWidth
               value={this.state.name}
-              onChange={this.changenameHandler}
+              onChange={this.changeNameHandler}
               error={this.state.name === ""}
               helperText={this.state.name === "" ? "Valor Requerido" : ""}
+            />
+          </Grid>
+
+          <Grid item xs={4}>
+            <TextField
+              required
+              autoFocus
+              className={classes.textfield}
+              margin="dense"
+              label="Precio"
+              type="number"
+              fullWidth
+              value={this.state.price}
+              onChange={this.changePriceHandler}
+              error={this.state.price < 0}
+              helperText={
+                this.state.price < 0
+                  ? "El precio debe ser un número positivo"
+                  : ""
+              }
+              InputProps={{
+                inputProps: { min: 0, max: 100000, step: 0.01 },
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                )
+              }}
             />
           </Grid>
 
@@ -215,16 +247,16 @@ export class Form extends Component {
                   {this.state.uploadingImage ? (
                     <Spinner />
                   ) : (
-                      this.state.imageLinks.map(imageLink => (
-                        <img
-                          height={100}
-                          key={imageLink}
-                          className={classes.img}
-                          src={imageLink}
-                          alt="producto"
-                        />
-                      ))
-                    )}
+                    this.state.imageLinks.map(imageLink => (
+                      <img
+                        height={100}
+                        key={imageLink}
+                        className={classes.img}
+                        src={imageLink}
+                        alt="producto"
+                      />
+                    ))
+                  )}
                 </div>
               )}
             </div>
@@ -249,15 +281,19 @@ export class Form extends Component {
                 if (error) return <p>Error :( recarga la página!</p>;
 
                 const options = data.subcategories.map(subcategory => {
-                  return ({ value: subcategory._id, label: subcategory.name });
-                })
+                  return { value: subcategory._id, label: subcategory.name };
+                });
 
                 return (
                   <div className={classes.textfield}>
-                    <InputLabel shrink htmlFor="subcategories">Subcategorias</InputLabel>
+                    <InputLabel shrink htmlFor="subcategories">
+                      Subcategorias
+                    </InputLabel>
                     <Select
                       id="subcategories"
-                      value={options.filter(option => this.state.subcategories.includes(option.value))}
+                      value={options.filter(option =>
+                        this.state.subcategories.includes(option.value)
+                      )}
                       onChange={this.changeSubcategoriesHandler}
                       options={options}
                       isMulti
@@ -305,7 +341,7 @@ export class Form extends Component {
                   config={{
                     youtube: {
                       playerVars: {
-                        origin: "http://localhost:3000",
+                        origin: "http://localhost:3000"
                       }
                     }
                   }}
