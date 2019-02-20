@@ -22,7 +22,6 @@ const userSchema = new Schema(
         mainAddress: {
             type: Schema.Types.ObjectId,
             ref: "Address",
-            required: true
         },
         addresses: [{
             type: Schema.Types.ObjectId,

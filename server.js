@@ -10,6 +10,8 @@ const bodyParser = require("body-parser");
 const externalRequest = require("./middleware/external-requests");
 
 const { saveImage, saveImages } = require("./helpers/images");
+const {sendEmail} =require("./helpers/Email/sendEmail")
+const {htmlContent} =require("./helpers/Email/template")
 
 const app = express();
 
@@ -28,6 +30,32 @@ app.use(
 
 const upload = multer({
     dest: "/uploads"
+});
+
+app.post("/sometrial",(req,res)=>{
+    console.log("sometrialmethod")
+    // res.send("hehe")
+    // sendEmail()
+    // htmlContent;
+    console.log(req.body.firstParam)
+    const emailContent={
+        name:"oscar",
+        email:"oscaralonso11@hotmail.com",
+        phone:"6862645073",
+        topic:"duda existencial",
+        body:"porque no vuelves"
+    }
+    const content=htmlContent(emailContent)
+    console.log(content)
+    const emailInfo={
+        to:"oscaralonso11@hotmail.com",
+        subject:"correo importante",
+        htmlContent:content
+    }
+    sendEmail(emailInfo);
+    var tryFetch = {myString: 'I am working fetch'};
+    res.status(200).json(tryFetch);
+
 });
 
 app.post('/uploadImage', upload.single("file"), (req, res) => {

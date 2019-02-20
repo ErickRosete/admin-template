@@ -13,6 +13,8 @@ import Link from "react-router-dom/Link";
 //Buttons
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/Add";
+
 
 const styles = theme => ({
     address: {
@@ -25,6 +27,12 @@ const styles = theme => ({
     },
     linea:{
         display:'flex'
+    },
+    // boton de agregar
+    fab: {
+        position: "fixed",
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 2
     }
 });
 
@@ -32,7 +40,8 @@ export class AddressPage extends Component {
   render() {
     const classes = this.props.classes;
     return (
-        <Layout title="Lista de direcciones">
+        <Layout 
+        title="Lista de direcciones">
             <div className={classes.address}>
                 <h1>hola mundo</h1>
                 <Query query={GET_ADDRESSES }>
@@ -63,6 +72,11 @@ export class AddressPage extends Component {
                         );
                     }}
                 </Query>
+                <Link className={classes.fab} to="/address/add">
+                    <Fab color="primary" aria-label="Add">
+                    <AddIcon />
+                    </Fab>
+                </Link>
             </div>
         </Layout>
     )

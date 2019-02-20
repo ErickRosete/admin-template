@@ -129,13 +129,14 @@ const transformShoppingCartProduct = shoppingCartProduct => {
 const transformProduct = product => {
   return {
     ...product._doc,
-    subcategories:  () => subcategoryLoader.loadMany(product._doc.subcategories)
+    subcategories: () => subcategoryLoader.loadMany(product._doc.subcategories)
   };
 };
 
 const transformUser = user => {
   return {
     ...user._doc,
+    password: null,
     address: getAddress.bind(this, user.address),
     addresses: () => addressLoader.loadMany(user._doc.addreses)
   };

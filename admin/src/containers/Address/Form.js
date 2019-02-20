@@ -19,6 +19,8 @@ import PlacesAutocomplete, {
 import MyGreatPlaceWithHover from './my_great_place_with_hover.jsx';
 // npm i react-pure-render
 import GoogleMapReact from 'google-map-react';
+import TextField from '@material-ui/core/TextField';
+import Button from "@material-ui/core/Button";
 
 const key = "AIzaSyC0OyV5AleQHaNYkrwPC8q2DegYgSagb5E";
 const placesScript = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&callback=initMap`
@@ -48,9 +50,14 @@ export class Form extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             address: '',
+            state:"Rio Culiacan",
+            calle:"callecita",
+            streetNumber:"27",
+            city:"Mexicali",
+            country:"Mexico",
+            zipCode:"21200",
             scriptLoaded: false,
             center: [59.938043, 30.337157],
             zoom: 15,
@@ -101,6 +108,9 @@ export class Form extends Component {
                     streetNumber: street,
                     calle: calle,
                 }
+                this.setState({
+                    ...json
+                })
                 return latLng
             }
             )
@@ -153,6 +163,22 @@ export class Form extends Component {
     //         .then(latLng => console.log('Success', latLng))
     //         .catch(error => console.error('Error', error));
     // }
+
+    onSubmitHandler = event => {
+        event.preventDefault();
+        console.log("clicked")
+        let address={
+            country: this.state.country,
+            // state: this.state.state,
+            city: this.state.city,
+            zipCode: Number(this.state.zipCode),
+            exteriorNumber: Number(this.state.streetNumber),
+            street: this.state.calle,
+        }
+        console.log(address)
+        this.props.onSubmit(address);
+        console.log(this.props.onSubmit) 
+    };
 
     changeDirectionHandler = (metodo,suggestions,event)=> {
         // this.setState({
@@ -240,9 +266,96 @@ export class Form extends Component {
                                 />
                             </GoogleMapReact>
                         </div>
-
+                        <form className="product-form" onSubmit={this.onSubmitHandler}>
+                            <Grid container spacing={24} justify="center">
+                                <Grid item xs={6}>
+                                    <TextField
+                                        id="outlined-full-width"
+                                        label="Calle"
+                                        style={{ margin: 8 }}
+                                        placeholder="Escribir calle"
+                                        helperText="Full width!"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        value={this.state.calle}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        id="outlined-full-width"
+                                        label="Número exterior"
+                                        style={{ margin: 8 }}
+                                        placeholder="Escribir numero exterior"
+                                        helperText="Full width!"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        value={this.state.streetNumber}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        id="outlined-full-width"
+                                        label="Ciudad"
+                                        style={{ margin: 8 }}
+                                        placeholder="Escribir ciudad"
+                                        helperText="Full width!"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        value={this.state.city}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        id="outlined-full-width"
+                                        label="País"
+                                        style={{ margin: 8 }}
+                                        placeholder="Escribir pais"
+                                        helperText="Full width!"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        value={this.state.country}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        id="outlined-full-width"
+                                        label="Código Postal"
+                                        style={{ margin: 8 }}
+                                        placeholder="Escribir código postal"
+                                        helperText="Full width!"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        value={this.state.zipCode}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Button type="submit" variant="contained" color="primary" autoFocus>
+                                        Guardar
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
                     </div>
-
                 }
             </div>
         )
