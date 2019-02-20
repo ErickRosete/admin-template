@@ -19,6 +19,9 @@ import ProductFormPage from "./pages/Product/Form/ProductForm";
 import AddressPage from "./pages/Address/Address";
 import RegisterPage from "./pages/Register/register";
 import AddressFormPage from "./pages/Address/Form/AddressForm";
+import ResetPage from "./pages/Reset/reset"
+import ResetPasswordPage from "./pages/Reset/reset2"
+
 //Providers and context
 import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
@@ -83,6 +86,8 @@ class App extends Component {
                   <Route path="/address/edit/:id" component={AddressFormPage} />
                   <Route path="/address" component={AddressPage} />
                   <Route path="/register" component={RegisterPage} />
+                  <Route path="/reset/:id"component={ResetPasswordPage}/>
+                  <Route path="/reset" component={ResetPage} />
                   <Redirect to="/category" exact />
                 </Switch>
               </React.Fragment>

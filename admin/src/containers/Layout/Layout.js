@@ -19,9 +19,16 @@ const styles = theme => ({
 
 export class Layout extends Component {
     state = {
-        mobileOpen: false
+        mobileOpen: false,
+        expanded: null,
     };
 
+    //expansion panel stuff
+    handleChange = panel => (event, expanded) => {
+        this.setState({
+            expanded: expanded ? panel : false,
+        });
+    };
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
     };
@@ -39,6 +46,8 @@ export class Layout extends Component {
                 <MainDrawer
                     toggleDrawer={this.handleDrawerToggle}
                     open={this.state.mobileOpen}
+                    expanded={this.state.expanded}
+                    handleChange={this.handleChange}
                 />
 
                 <main className={classes.content}>

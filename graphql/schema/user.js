@@ -23,6 +23,7 @@ const userDef = `
 const userQuery = `
     users: [User!]!
     user(id: ID!): User!
+    userByEmail(email:String!): User!
 `;
 
 const userMutation = `

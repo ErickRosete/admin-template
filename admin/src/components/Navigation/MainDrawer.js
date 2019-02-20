@@ -6,14 +6,24 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
+//mis iconos
+import Place from "@material-ui/icons/Place";
+import PersonAdd from "@material-ui/icons/PersonAdd";
+import LockOpen from "@material-ui/icons/LockOpen"
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Hidden from "@material-ui/core/Hidden";
 import EventIcon from "@material-ui/icons/Event";
 import { NavLink } from "react-router-dom";
-
 // import logo from "../../assets/images/logos/logo.png";
+
+//new stuff
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 const drawerWidth = 241;
 
@@ -50,8 +60,8 @@ const ResponsiveDrawer = props => {
     { id: 3, icon: <EventIcon />, text: "Categorias", linkTo: "/category" },
     { id: 4, icon: <EventIcon />, text: "Subcategorias", linkTo: "/subcategory" },
     { id: 5, icon: <EventIcon />, text: "Productos", linkTo: "/product" },
-    { id: 6, icon: <EventIcon />, text: "Direcciones", linkTo: "/address" },
-    { id: 7, icon: <EventIcon />, text: "Registro", linkTo: "/register" }
+    { id: 6, icon: <Place />, text: "Direcciones", linkTo: "/address" },
+    { id: 7, icon: <PersonAdd />, text: "Registro", linkTo: "/register" }
   ];
 
   const { classes, theme } = props;
@@ -80,7 +90,37 @@ const ResponsiveDrawer = props => {
             <ListItemText primary={sideLink.text} />
           </ListItem>
         ))}
+        <ExpansionPanel expanded={props.expanded === 'panel1'} onChange={props.handleChange('panel1')}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}
+              style={{padding:'0'}}>
+              <ListItem
+                button
+                // key={sideLink.id}
+                key={1}
+                component={NavLink}
+                to="/register"
+                style={{width:"100%"}}
+              >
+                <ListItemIcon><PersonAdd/></ListItemIcon>
+                <ListItemText primary="Registro" />
+              </ListItem>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{padding:'0'}}>
+            <ListItem
+                  key={2}
+                  button
+                  // key={sideLink.id}
+                  component={NavLink}
+                  to="/reset"
+                  style={{width:"100%"}}
+                >
+                <ListItemIcon><LockOpen/></ListItemIcon>
+                <ListItemText primary="reset" />
+            </ListItem>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
       </List>
+     
 
       <Divider />
     </div>

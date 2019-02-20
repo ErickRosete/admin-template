@@ -12,6 +12,7 @@ const externalRequest = require("./middleware/external-requests");
 const { saveImage, saveImages } = require("./helpers/images");
 const {sendEmail} =require("./helpers/Email/sendEmail")
 const {htmlContent} =require("./helpers/Email/template")
+const {resetHtmlContent} =require("./helpers/Email/resetTemplate")
 
 const app = express();
 
@@ -31,6 +32,36 @@ app.use(
 const upload = multer({
     dest: "/uploads"
 });
+
+app.get("/reset/:id",(req,res)=>{
+    var tryFetch = {response: `resetting ${req.params.id}`};
+    res.status(200).json(tryFetch);
+})
+
+app.post("/reset",(req,res)=>{
+    console.log("resetmethod")
+    console.log(req.body.email)
+    console.log(req.body.id)
+    const emailContent={
+        name:"oscar",
+        email:req.body.email,
+        phone:"6862645073",
+        topic:"duda existencial",
+        body:"porque no vuelves",
+        siteName:"oscar site",
+        id:req.body.id
+    }
+    const content=resetHtmlContent(emailContent)
+    console.log(content)
+    const emailInfo={
+        to:"oscaralonso11@hotmail.com",
+        subject:"Reset Password",
+        htmlContent:content
+    }
+    sendEmail(emailInfo);
+    var tryFetch = {response: 'Email sent'};
+    res.status(200).json(tryFetch);
+})
 
 app.post("/sometrial",(req,res)=>{
     console.log("sometrialmethod")

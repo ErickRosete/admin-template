@@ -25,6 +25,15 @@ module.exports = {
             throw err;
         }
     },
+    userByEmail:async(args,req)=>{
+        const userInDB = await User.findOne({ email: args.email});
+        if (userInDB) {
+            return {...userInDB._doc}
+        }
+        else{
+            throw new Error("User does not Exists");
+        }
+    },
     createUser: async (args, req) => {
         console.log(args.userInput.mainAddress)
         let user;
