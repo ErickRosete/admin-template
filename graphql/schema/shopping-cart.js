@@ -35,9 +35,10 @@ const shoppingCartMutation = `
     createShoppingCart(shoppingCartInput: ShoppingCartInput!): ShoppingCart
     updateShoppingCart(id: ID!, shoppingCartInput: ShoppingCartInput!): ShoppingCart
     deleteShoppingCart(id: ID!): ShoppingCart
-    addProductToShoppingCart(shoppingCartId: ID!, productId: ID!): ShoppingCart
     updateShoppingCartProduct(id: ID!, shoppingCartProductInput: ShoppingCartProductInput!): ShoppingCartProduct
     deleteShoppingCartProduct(id: ID!): ShoppingCartProduct
+    addProductToShoppingCart(shoppingCartId: ID!, productId: ID!): ShoppingCart
+    addProductToUserShoppingCart(userId: ID!, productId: ID!): ShoppingCart
 `;
 
 exports.shoppingCartDef = shoppingCartDef;
