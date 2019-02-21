@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import ShoppingCartPage from "./pages/ShoppingCart/ShoppingCart";
 import ProductsPage from "./pages/Products/Products";
+import PaymentPage from "./pages/Payment/Payment";
+
 
 import "./App.css";
 
@@ -21,6 +23,7 @@ class App extends Component {
           <Switch>
             <Route path="/cart" component={ShoppingCartPage} />
             <Route path="/products" component={ProductsPage} />
+            <Route path="/payment" component={PaymentPage} />
             <Redirect to="/products" exact />
           </Switch>
         </ApolloProvider>

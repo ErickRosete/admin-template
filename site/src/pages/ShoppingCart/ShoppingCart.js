@@ -6,7 +6,7 @@ import {
 } from "./constants";
 import Query from "react-apollo/Query";
 import Mutation from "react-apollo/Mutation";
-
+import Link from "react-router-dom/Link";
 import Spinner from "../../components/Spinner/Spinner";
 import "./ShoppingCart.css";
 
@@ -44,79 +44,97 @@ export class ShoppingCartPage extends Component {
           {({ loading, error, data }) => {
             if (loading) return <Spinner />;
             if (error) return <p>Error :( recarga la pagina!</p>;
+            console.log(data.shoppingCartByUser.shoppingCartProducts);
+            if (data.shoppingCartByUser.shoppingCartProducts.length === 0) {
+              return (
+                <React.Fragment>
+                  <p>No hay productos en tu carro de compras...</p>
+                  <Link to="/products">
+                    <button>Comienza a buscar productos</button>
+                  </Link>
+                </React.Fragment>
+              );
+            }
+
             let totalPrice = 0;
             return (
-              <table className="cart__table">
-                <tbody>
-                  <tr className="cart__table-top">
-                    <th>Nombre del Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio total</th>
-                    <th>Eliminar</th>
-                  </tr>
-                  {data.shoppingCartByUser.shoppingCartProducts.map(
-                    shoppingCartProduct => {
-                      const price =
-                        shoppingCartProduct.product.price *
-                        shoppingCartProduct.quantity;
-                      totalPrice += price;
-                      return (
-                        <tr key={shoppingCartProduct._id}>
-                          <td>{shoppingCartProduct.product.name}</td>
-                          <td>
-                            <Mutation mutation={UPDATE_CART_PRODUCT}>
-                              {updateCartProduct => (
-                                <input
-                                  type="number"
-                                  min={1}
-                                  max={shoppingCartProduct.product.quantity}
-                                  value={shoppingCartProduct.quantity}
-                                  onChange={event => {
-                                    updateCartProduct({
-                                      variables: {
-                                        id: shoppingCartProduct._id,
-                                        quantity: +event.target.value
-                                      }
-                                    });
-                                  }}
-                                />
-                              )}
-                            </Mutation>
-                          </td>
-                          <td>${price}</td>
-                          <td>
-                            <Mutation
-                              mutation={DELETE_CART_PRODUCT}
-                              update={this.deleteCartProductFromCache}
-                            >
-                              {deleteCartProduct => (
-                                <button
-                                  className="cart__delete-item"
-                                  onClick={() => {
-                                    deleteCartProduct({
-                                      variables: {
-                                        id: shoppingCartProduct._id
-                                      }
-                                    });
-                                  }}
-                                >
-                                  X
-                                </button>
-                              )}
-                            </Mutation>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-                  <tr className="cart__total">
-                    <td>Total:</td>
-                    <td />
-                    <td>${totalPrice}</td>
-                    <td />
-                  </tr>
-                </tbody>
-              </table>
+              <div>
+                <table className="cart__table">
+                  <tbody>
+                    <tr className="cart__table-top">
+                      <th>Nombre del Producto</th>
+                      <th>Cantidad</th>
+                      <th>Precio total</th>
+                      <th>Eliminar</th>
+                    </tr>
+                    {data.shoppingCartByUser.shoppingCartProducts.map(
+                      shoppingCartProduct => {
+                        const price =
+                          shoppingCartProduct.product.price *
+                          shoppingCartProduct.quantity;
+                        totalPrice += price;
+                        return (
+                          <tr key={shoppingCartProduct._id}>
+                            <td>{shoppingCartProduct.product.name}</td>
+                            <td>
+                              <Mutation mutation={UPDATE_CART_PRODUCT}>
+                                {updateCartProduct => (
+                                  <input
+                                    type="number"
+                                    min={1}
+                                    max={shoppingCartProduct.product.quantity}
+                                    value={shoppingCartProduct.quantity}
+                                    onChange={event => {
+                                      updateCartProduct({
+                                        variables: {
+                                          id: shoppingCartProduct._id,
+                                          quantity: +event.target.value
+                                        }
+                                      });
+                                    }}
+                                  />
+                                )}
+                              </Mutation>
+                            </td>
+                            <td>${price}</td>
+                            <td>
+                              <Mutation
+                                mutation={DELETE_CART_PRODUCT}
+                                update={this.deleteCartProductFromCache}
+                              >
+                                {deleteCartProduct => (
+                                  <button
+                                    className="cart__delete-item"
+                                    onClick={() => {
+                                      deleteCartProduct({
+                                        variables: {
+                                          id: shoppingCartProduct._id
+                                        }
+                                      });
+                                    }}
+                                  >
+                                    X
+                                  </button>
+                                )}
+                              </Mutation>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                    <tr className="cart__total">
+                      <td>Total:</td>
+                      <td />
+                      <td>${totalPrice}</td>
+                      <td />
+                    </tr>
+                  </tbody>
+                </table>
+
+                <Link to="/payment">
+                  <button>Pagar</button>
+                </Link>
+              </div>
             );
           }}
         </Query>
