@@ -33,3 +33,20 @@ export const DELETE_CART_PRODUCT = gql`
     }
   }
 `;
+
+export const UPDATE_CART_PRODUCT = gql`
+  mutation UpdateShoppingCartProduct($id: ID!, $quantity: Int) {
+    updateShoppingCartProduct(
+      id: $id
+      shoppingCartProductInput: { quantity: $quantity }
+    ) {
+      _id
+      quantity
+      product {
+        _id
+        name
+        quantity
+      }
+    }
+  }
+`;

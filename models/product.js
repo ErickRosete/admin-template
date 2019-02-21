@@ -15,6 +15,7 @@ const productSchema = new Schema({
     type: Number,
     required: true
   },
+  quantity: Number,
   imageLinks: [String],
   videoLink: String,
   shortDescription: String,

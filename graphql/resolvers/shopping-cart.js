@@ -94,6 +94,17 @@ module.exports = {
   },
   deleteShoppingCartProduct: async args => {
     try {
+      //Delete reference from shopping cart
+      const shoppingCart = await ShoppingCart.findOne({
+        shoppingCartProducts: { _id: args.id }
+      });
+      const index = shoppingCart.shoppingCartProducts.findIndex(
+        shoppingCartProduct => shoppingCartProduct._id == args.id
+      );
+      shoppingCart.shoppingCartProducts.splice(index, 1);
+      await shoppingCart.save();
+
+      //Delete shopping cart product
       const shoppingCartProduct = await ShoppingCartProduct.findByIdAndDelete(
         args.id
       );

@@ -3,6 +3,7 @@ const productDef = `
         _id: ID!
         name: String!
         price: Float
+        quantity: Int
         imageLinks: [String]
         shortDescription: String
         description: String
@@ -13,6 +14,7 @@ const productDef = `
     input ProductInput{
         name: String
         price: Float
+        quantity: Int
         imageLinks: [String]
         shortDescription: String
         description: String
