@@ -13,12 +13,15 @@ const { saveImage, saveImages } = require("./helpers/images");
 const {sendEmail} =require("./helpers/Email/sendEmail")
 const {htmlContent} =require("./helpers/Email/template")
 const {resetHtmlContent} =require("./helpers/Email/resetTemplate")
+const { saveImageAsync}=require("./helpers/Images/images")
+const isAuth = require("./middleware/is-auth");
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(express.static('public'))
 app.use(externalRequest);
+app.use(isAuth);
 
 app.use(
     "/graphql",
@@ -97,11 +100,18 @@ app.post('/uploadImages', upload.array("files"), (req, res) => {
     saveImages(req, res);
 });
 
+app.post('/uploadUserImage', upload.array("files"), async (req, res) => {
+    const folder=req.body.folder
+    console.log(`folder donde se guardara: ${folder}`)
+    await saveImageAsync(req,res,folder);
+
+});
+
 mongoose
     .connect(
         `mongodb+srv://${process.env.MONGO_USER}:${
         process.env.MONGO_PASSWORD
         }@admincluster-zdvxr.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`
-    )
+    ,{ useNewUrlParser: true })
     .then(() => app.listen(5000))
     .catch(err => console.log(err));

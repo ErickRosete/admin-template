@@ -19,8 +19,9 @@ import ProductFormPage from "./pages/Product/Form/ProductForm";
 import AddressPage from "./pages/Address/Address";
 import RegisterPage from "./pages/Register/register";
 import AddressFormPage from "./pages/Address/Form/AddressForm";
-import ResetPage from "./pages/Reset/reset"
-import ResetPasswordPage from "./pages/Reset/reset2"
+import ResetPage from "./pages/Reset/reset";
+import ResetPasswordPage from "./pages/Reset/resetPassword";
+import ProfilePage from "./pages/Profile/profile";
 
 //Providers and context
 import { ApolloProvider } from "react-apollo";
@@ -46,6 +47,13 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.state);
+    console.log(this.state.token);
+    if (this.state.token) {
+      console.log("yey");
+    } else {
+      console.log("wtf");
+    }
     const theme = createMuiTheme({
       palette: {
         primary: purple,
@@ -69,34 +77,29 @@ class App extends Component {
           <ApolloProvider client={client}>
             <MuiThemeProvider theme={theme}>
               <CssBaseline />
-              {/* {this.state.token ? ( */}
-              <React.Fragment>
-                <Switch>
-                  <Route path="/blog/add" component={BlogFormPage} />
-                  <Route path="/blog/edit/:id" component={BlogFormPage} />
-                  <Route path="/blog" component={BlogPage} />
-                  <Route path="/category" component={CategoryPage} />
-                  <Route path="/subcategory" component={SubcategoryPage} />
-                  <Route path="/newsletter" component={NewsletterPage} />
-                  <Route path="/auth" component={AuthPage} />
-                  <Route path="/product/add" component={ProductFormPage} />
-                  <Route path="/product/edit/:id" component={ProductFormPage} />
-                  <Route path="/product" component={ProductPage} />
-                  <Route path="/address/add" component={AddressFormPage} />
-                  <Route path="/address/edit/:id" component={AddressFormPage} />
-                  <Route path="/address" component={AddressPage} />
-                  <Route path="/register" component={RegisterPage} />
-                  <Route path="/reset/:id"component={ResetPasswordPage}/>
-                  <Route path="/reset" component={ResetPage} />
-                  <Redirect to="/category" exact />
-                </Switch>
-              </React.Fragment>
-              {/* ) : (
               <Switch>
-                <Route path="/auth" component={AuthPage} />
-                <Redirect to="/auth" exact />
+                {this.state.token && <Route path="/blog/add" component={BlogFormPage} /> }
+                {this.state.token && <Route path="/blog/edit/:id" component={BlogFormPage} /> }
+                {this.state.token && <Route path="/blog" component={BlogPage} /> }
+                {this.state.token && <Route path="/category" component={CategoryPage} /> }
+                {this.state.token && <Route path="/subcategory" component={SubcategoryPage} /> }
+                {this.state.token && <Route path="/newsletter" component={NewsletterPage} /> }
+                {this.state.token && <Route path="/product/add" component={ProductFormPage} /> }
+                {this.state.token && <Route path="/product/edit/:id" component={ProductFormPage} /> }
+                {this.state.token && <Route path="/product" component={ProductPage} /> }
+                {this.state.token && <Route path="/address/add" component={AddressFormPage} />}
+                {this.state.token && <Route path="/address/edit/:id" component={AddressFormPage} />}
+                {this.state.token && <Route path="/address" component={AddressPage} />}
+                {this.state.token && <Route path="/profile/:id" component={ProfilePage} />}
+                {this.state.token && <Route path="/register" component={RegisterPage} />}
+                {this.state.token && <Route path="/reset/:id" component={ResetPasswordPage} />}
+                {this.state.token && <Route path="/reset" component={ResetPage} />}
+                {this.state.token && <Redirect to="/category" exact />}
+                {!this.state.token && (
+                  <Route path="/auth" component={AuthPage} />
+                )}
+                {!this.state.token && <Redirect to="/auth" exact />}
               </Switch>
-            )} */}
             </MuiThemeProvider>
           </ApolloProvider>
         </AuthContext.Provider>

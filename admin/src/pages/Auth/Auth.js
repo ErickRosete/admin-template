@@ -46,32 +46,36 @@ class AuthPage extends Component {
         `
     };
 
-    fetch("http://localhost:8000/graphql", {
+    fetch("http://localhost:5000/graphql", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json"
       }
     })
-      .then(res => {
+    .then(res => {
+      return res.json().then(resData => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed!");
-        }
-        return res.json();
-      })
-      .then(resData => {
-        console.log(resData);
-        if (resData.data.login.token) {
-          this.context.login(
-            resData.data.login.token,
-            resData.data.login.userId,
-            resData.data.login.tokenExpiration
-          );
+          const error={errorMessage:resData.errors[0].message}
+          throw Error(JSON.stringify(error));
+        } else {
+          if(resData.data.login.token){
+            console.log(this.context.login(
+              resData.data.login.token,
+              resData.data.login.userId,
+              resData.data.login.tokenExpiration
+            ));
+            console.log(this.context.login)
+            console.log(this.props)
+            console.log(this.context)
+          }
         }
       })
       .catch(err => {
-        console.log(err);
-      });
+        // console.log("error interno del servidor");
+        console.log(JSON.parse(err.message));
+      });;
+    })
   };
 
   render() {
@@ -87,7 +91,7 @@ class AuthPage extends Component {
           </div>
           <div className="form-control">
             <label htmlFor="email">Correo Electrónico</label>
-            <input type="email" id="email" ref={this.emailEl} />
+            <input type="text" id="email" ref={this.emailEl} />
           </div>
           <div className="form-control">
             <label htmlFor="password">Contraseña</label>

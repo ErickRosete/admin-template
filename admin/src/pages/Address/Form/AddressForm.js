@@ -90,7 +90,7 @@ export class AddressFormPage extends Component {
                                 const result= createAddress({
                                     variables: { ...addressEntry }
                                 }).then((result)=>{console.log(result.data.createAddress)});
-                                // console.log(result)
+                                console.log(result)
                                 // this.setState({ return: true })
                             }}
                         />

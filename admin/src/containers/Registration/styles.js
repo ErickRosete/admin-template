@@ -8,3 +8,5 @@ const styles = theme => ({
       justifyContent: "center"
     },
 })
+
+export default styles;
