@@ -38,6 +38,17 @@ class App extends Component {
     userId: null
   };
 
+  constructor(props) {
+    super(props);
+    if(JSON.parse(sessionStorage.getItem('jwtToken'))!=null){
+      const data=JSON.parse(sessionStorage.getItem('jwtToken'))
+      console.log(data)
+      this.state.token=data.token
+      this.state.userId=data.userId
+    }
+  }
+ 
+
   login = (token, userId, tokenExpiration) => {
     this.setState({ token: token, userId: userId });
   };
@@ -47,8 +58,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state);
-    console.log(this.state.token);
     if (this.state.token) {
       console.log("yey");
     } else {
