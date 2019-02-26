@@ -40,7 +40,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    const data = JSON.parse(sessionStorage.getItem("jwtToken"));
+    const data = JSON.parse(localStorage.getItem("jwtToken"));
     if (data) {
       this.state = {
         ...data
@@ -52,6 +52,7 @@ class App extends Component {
     // https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
     //If you use localStorage instead of sessionStorage, then this will persist across tabs and new windows.
     //sessionStorage = persists only in current tab
+    // https://stackoverflow.com/questions/15171711/expiry-of-sessionstorage
     let authObject = {
       token,
       userId
@@ -59,12 +60,12 @@ class App extends Component {
     this.setState(authObject);
 
     authObject = JSON.stringify(authObject);
-    sessionStorage.setItem("jwtToken", authObject);
+    localStorage.setItem("jwtToken", authObject);
   };
 
   logout = () => {
     this.setState({ token: null, userId: null });
-    sessionStorage.setItem("jwtToken", null);
+    localStorage.setItem("jwtToken", null);
   };
 
   render() {
