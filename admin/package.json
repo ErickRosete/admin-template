@@ -12,6 +12,7 @@
     "graphql": "^14.1.1",
     "html-to-draftjs": "^1.4.0",
     "nodemailer": "^5.1.1",
+    "rc-pagination": "^1.17.8",
     "react": "^16.8.1",
     "react-apollo": "^2.4.1",
     "react-dom": "^16.8.1",

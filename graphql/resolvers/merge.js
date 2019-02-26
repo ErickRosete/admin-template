@@ -7,7 +7,7 @@ const ShopOrderProduct = require("../../models/shop-order-product");
 const ShopOrderAddress = require("../../models/shop-order-address");
 const DataLoader = require("dataloader");
 
-// const { dateToString } = require("../../helpers/date");
+const { dateToString } = require("../../helpers/date");
 
 const userLoader = new DataLoader(userIds => {
   return getUsers(userIds);
@@ -163,7 +163,8 @@ const transformShopOrder = shopOrder => {
       shopOrder.shopOrderAddress
     ),
     shopOrderProducts: () =>
-      shopOrderProductLoader.loadMany(shopOrder.shopOrderProducts)
+      shopOrderProductLoader.loadMany(shopOrder.shopOrderProducts),
+    createdAt: dateToString(shopOrder.createdAt)
   };
 };
 

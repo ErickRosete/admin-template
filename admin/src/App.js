@@ -22,6 +22,7 @@ import AddressFormPage from "./pages/Address/Form/AddressForm";
 import ResetPage from "./pages/Reset/reset";
 import ResetPasswordPage from "./pages/Reset/resetPassword";
 import ProfilePage from "./pages/Profile/profile";
+import ShopOrdersPage from "./pages/ShopOrders/ShopOrders";
 
 //Providers and context
 import { ApolloProvider } from "react-apollo";
@@ -99,6 +100,9 @@ class App extends Component {
               <CssBaseline />
               <Switch>
                 {this.state.token && (
+                  <Route path="/shopOrders" component={ShopOrdersPage} />
+                )}
+                {this.state.token && (
                   <Route path="/blog/add" component={BlogFormPage} />
                 )}
                 {this.state.token && (
@@ -146,7 +150,7 @@ class App extends Component {
                 {this.state.token && (
                   <Route path="/reset" component={ResetPage} />
                 )}
-                {this.state.token && <Redirect to="/category" exact />}
+                {this.state.token && <Redirect to="/shopOrders" exact />}
                 {!this.state.token && (
                   <Route path="/auth" component={AuthPage} />
                 )}
