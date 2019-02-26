@@ -65,7 +65,7 @@ class AuthPage extends Component {
               resData.data.login.userId,
               resData.data.login.tokenExpiration
             ));
-            https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
+            // https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
             //store JWT Token to browser session storage 
             //If you use localStorage instead of sessionStorage, then this w/persisted across tabs and new windows.
             //sessionStorage = persisted only in current tab

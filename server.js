@@ -114,4 +114,4 @@ mongoose
         }@admincluster-zdvxr.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`
     ,{ useNewUrlParser: true })
     .then(() => app.listen(5000))
-    .catch(err => console.log(err));
+    .catch(err => {console.log("error general");console.log(err)});

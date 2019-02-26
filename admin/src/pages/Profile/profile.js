@@ -6,6 +6,10 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Spinner from "../../components/Spinner/Spinner";
 import Button from "@material-ui/core/Button";
+import { withApollo } from "react-apollo";
+import { SEARCH_USER_BY_ID } from "./constants";
+
+
 
 const styles = theme => ({
   textfield: {
@@ -34,11 +38,44 @@ const styles = theme => ({
 });
 
 export class ProfilePage extends Component {
+  runQuery = () => {
+    const id= this.props.match.params.id
+    console.log(this.props.client)
+    this.props.client
+      .query({
+        query: SEARCH_USER_BY_ID,
+        variables: { id },
+        // options:{errorPolicy: 'all' },
+        // onError: ({ graphQLErrors, networkError, operation, forward }) => {
+        //   console.log("mi error handler")
+        //   if (graphQLErrors) {}}
+      })
+      .then(data => {
+        console.log(data.data.user)
+        this.setState(data.data.user)
+        // if (data.data.userByEmail._id.length > 0) {
+        //   this.sendEmail(email, data.data.userByEmail._id);
+        // }
+      })
+      .catch(error => {
+        console.log(`error: ${error.graphQLErrors[0].message}`)
+        // console.log(error)
+        // console.log(Object.getOwnPropertyNames(error))
+      });
+  };
+
+  componentDidMount(){
+    this.runQuery();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      password: "",
-      password2: "",
+      email:"not set",
+      name: "not set",
+      password: "not set",
+      birthdate:"not set",
+      mainAddress:"not set",
       completed: false,
       imageLinks: "",
       uploadingImages: false
@@ -51,7 +88,7 @@ export class ProfilePage extends Component {
     var formData = new FormData();
 
     Array.from(event.target.files).forEach(image => {
-      console.log(image);
+      // console.log(image);
       formData.append("files", image);
     });
     // const image=event.target.files
@@ -87,7 +124,9 @@ export class ProfilePage extends Component {
 
   render() {
     const { classes } = this.props;
-
+    // const { data } = this.props;
+    // console.log("erroresssss")
+    // console.log(data.error)
     return (
       <Layout title={this.title}>
         <div>oh no</div>
@@ -99,7 +138,8 @@ export class ProfilePage extends Component {
                 fullWidth
                 id="outlined-disabled"
                 label="Nombre"
-                defaultValue="Hello World"
+                // defaultValue="Hello World"
+                value={this.state.name}
                 className={classes.textField}
                 margin="normal"
                 variant="outlined"
@@ -111,8 +151,9 @@ export class ProfilePage extends Component {
                 disabled
                 fullWidth
                 id="outlined-disabled"
-                label="Contrasena"
-                defaultValue="Hello World"
+                label="Email"
+                // defaultValue="Hello World"
+                value={this.state.email}
                 className={classes.textField}
                 margin="normal"
                 variant="outlined"
@@ -124,8 +165,23 @@ export class ProfilePage extends Component {
                 disabled
                 fullWidth
                 id="outlined-disabled"
-                label="Direcciones"
-                defaultValue="Hello World"
+                label="Cumpleanos"
+                // defaultValue="7 julio"
+                value={this.state.birthdate}
+                className={classes.textField}
+                margin="normal"
+                variant="outlined"
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                disabled
+                fullWidth
+                id="outlined-disabled"
+                label="Direccion Principal"
+                value={this.state.mainAddress!=null?this.state.mainAddress:"notset"}
+                // defaultValue="Hello World"
                 className={classes.textField}
                 margin="normal"
                 variant="outlined"
@@ -193,4 +249,4 @@ ProfilePage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ProfilePage);
+export default withApollo(withStyles(styles)(ProfilePage));

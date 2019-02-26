@@ -97,6 +97,7 @@ export class ResetPage extends Component {
   };
 
   render() {
+
     return (
       <Layout title="Registro de usuario">
         <div>

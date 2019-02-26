@@ -28,8 +28,8 @@ const userDef = `
 
 const userQuery = `
     users: [User!]!
-    user(id: ID!): User!
-    userByEmail(email:String!): User!
+    user(id: ID!): User
+    userByEmail(email:String!): User
     login(userInput: UserInput!): AuthData!
 `;
 

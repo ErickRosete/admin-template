@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../../models/user");
 const { transformUser, createAddress } = require("./merge");
+// var GraphQLError = require('graphql/error'); // CommonJS
+const { GraphQLError } =require('graphql');
+var mongoose = require('mongoose');
+
+// const { UserInputError  } =require('apollo-server')
+// import { UserInputError } from 'apollo-server';
+
 
 module.exports = {
     users: async () => {
@@ -20,19 +27,50 @@ module.exports = {
     
     user: async (args, req) => {
         try {
-            const user = await User.findById(args.id);
-            return transformUser(user);
+            // if (args.id != "metadata") {
+            // }
+            console.log(`el id es valido ${mongoose.Types.ObjectId.isValid(args.id )}`); // false
+            // if(!mongoose.Types.ObjectId.isValid(args.id )){
+            //     throw new GraphQLError("Formato inadecuado de Id principal");
+            // }
+            const userInDB = await User.findById(args.id);
+            console.log(userInDB)
+            if (userInDB) {
+                // return {...userInDB._doc}
+                return transformUser(userInDB);
+            }
+            else{
+                throw new Error("User does not Exists");
+            }
         } catch (err) {
-            throw err;
+            console.log(`error: ${err.message}`)
+            if(err.message==="User does not Exists") throw err.message;
+            else{
+                
+                throw new GraphQLError("Formato inadecuado de Id");
+                // return "formato inadecuado de id"
+                // throw {status: 403, message: 'Formato inadecuado de Id'};
+                // UserInputError("Formato inadecuado de Id");
+                // throw new UserInputError(
+                //     'Failed to get events due to validation errors',
+                //     { validationErrors }
+                //   );
+            }
         }
     },
+
     userByEmail:async(args,req)=>{
-        const userInDB = await User.findOne({ email: args.email});
-        if (userInDB) {
-            return {...userInDB._doc}
+        try{
+            const userInDB = await User.findOne({ email: args.email});
+            if (userInDB) {
+                return {...userInDB._doc}
+            }
+            else{
+                throw new Error("User does not Exists");
+            }
         }
-        else{
-            throw new Error("User does not Exists");
+        catch (err) {
+            throw err;
         }
     },
 

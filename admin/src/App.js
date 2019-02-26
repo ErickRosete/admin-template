@@ -58,11 +58,11 @@ class App extends Component {
   };
 
   render() {
-    if (this.state.token) {
-      console.log("yey");
-    } else {
-      console.log("wtf");
-    }
+    // if (this.state.token) {
+    //   console.log("yey");
+    // } else {
+    //   console.log("wtf");
+    // }
     const theme = createMuiTheme({
       palette: {
         primary: purple,

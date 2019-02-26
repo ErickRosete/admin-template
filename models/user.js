@@ -17,16 +17,23 @@ const userSchema = new Schema(
         },
         birthdate:{
             type: String,
-            required: true
         },
         mainAddress: {
             type: Schema.Types.ObjectId,
             ref: "Address",
         },
+        imageLink:{
+            type: String,
+        },
         addresses: [{
             type: Schema.Types.ObjectId,
             ref: "Address"
-        }]
+        }],
+        delete:{
+            type: Boolean,
+            default: false,
+            required:false
+        }
     },
 );
 
