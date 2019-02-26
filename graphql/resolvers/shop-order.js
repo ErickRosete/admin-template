@@ -11,7 +11,9 @@ const { transformShopOrder } = require("./merge");
 module.exports = {
   shopOrders: async () => {
     try {
-      const shopOrders = await ShopOrder.find();
+      const shopOrders = await ShopOrder.find().sort({
+        createdAt: -1
+      });
       return shopOrders.map(shopOrder => {
         return transformShopOrder(shopOrder);
       });
@@ -29,7 +31,10 @@ module.exports = {
   },
   shopOrdersByUser: async args => {
     try {
-      const shopOrders = await ShopOrder.find({ user: args.id });
+      const shopOrders = await ShopOrder.find({ user: args.id }).sort({
+        createdAt: -1
+      });
+
       return shopOrders.map(shopOrder => {
         return transformShopOrder(shopOrder);
       });

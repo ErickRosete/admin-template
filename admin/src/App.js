@@ -40,21 +40,31 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    if(JSON.parse(sessionStorage.getItem('jwtToken'))!=null){
-      const data=JSON.parse(sessionStorage.getItem('jwtToken'))
-      console.log(data)
-      this.state.token=data.token
-      this.state.userId=data.userId
+    const data = JSON.parse(sessionStorage.getItem("jwtToken"));
+    if (data) {
+      this.state = {
+        ...data
+      };
     }
   }
- 
 
   login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+    // https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
+    //If you use localStorage instead of sessionStorage, then this will persist across tabs and new windows.
+    //sessionStorage = persists only in current tab
+    let authObject = {
+      token,
+      userId
+    };
+    this.setState(authObject);
+
+    authObject = JSON.stringify(authObject);
+    sessionStorage.setItem("jwtToken", authObject);
   };
 
   logout = () => {
     this.setState({ token: null, userId: null });
+    sessionStorage.setItem("jwtToken", null);
   };
 
   render() {
@@ -87,22 +97,54 @@ class App extends Component {
             <MuiThemeProvider theme={theme}>
               <CssBaseline />
               <Switch>
-                {this.state.token && <Route path="/blog/add" component={BlogFormPage} /> }
-                {this.state.token && <Route path="/blog/edit/:id" component={BlogFormPage} /> }
-                {this.state.token && <Route path="/blog" component={BlogPage} /> }
-                {this.state.token && <Route path="/category" component={CategoryPage} /> }
-                {this.state.token && <Route path="/subcategory" component={SubcategoryPage} /> }
-                {this.state.token && <Route path="/newsletter" component={NewsletterPage} /> }
-                {this.state.token && <Route path="/product/add" component={ProductFormPage} /> }
-                {this.state.token && <Route path="/product/edit/:id" component={ProductFormPage} /> }
-                {this.state.token && <Route path="/product" component={ProductPage} /> }
-                {this.state.token && <Route path="/address/add" component={AddressFormPage} />}
-                {this.state.token && <Route path="/address/edit/:id" component={AddressFormPage} />}
-                {this.state.token && <Route path="/address" component={AddressPage} />}
-                {this.state.token && <Route path="/profile/:id" component={ProfilePage} />}
-                {this.state.token && <Route path="/register" component={RegisterPage} />}
-                {this.state.token && <Route path="/reset/:id" component={ResetPasswordPage} />}
-                {this.state.token && <Route path="/reset" component={ResetPage} />}
+                {this.state.token && (
+                  <Route path="/blog/add" component={BlogFormPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/blog/edit/:id" component={BlogFormPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/blog" component={BlogPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/category" component={CategoryPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/subcategory" component={SubcategoryPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/newsletter" component={NewsletterPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/product/add" component={ProductFormPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/product/edit/:id" component={ProductFormPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/product" component={ProductPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/address/add" component={AddressFormPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/address/edit/:id" component={AddressFormPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/address" component={AddressPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/profile/:id" component={ProfilePage} />
+                )}
+                {this.state.token && (
+                  <Route path="/register" component={RegisterPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/reset/:id" component={ResetPasswordPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/reset" component={ResetPage} />
+                )}
                 {this.state.token && <Redirect to="/category" exact />}
                 {!this.state.token && (
                   <Route path="/auth" component={AuthPage} />

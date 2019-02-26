@@ -5,15 +5,15 @@ import AuthContext from "../../context/auth-context";
 
 // import logo from "../../assets/images/logo/logo.png";
 import "./Auth.css";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
   authRoot: {
     height: "100vh",
     display: "flex",
-    backgroundColor: theme.palette.primary.main,
-  },
+    backgroundColor: theme.palette.primary.main
+  }
 });
 
 class AuthPage extends Component {
@@ -52,41 +52,28 @@ class AuthPage extends Component {
       headers: {
         "Content-Type": "application/json"
       }
-    })
-    .then(res => {
-      return res.json().then(resData => {
-        if (res.status !== 200 && res.status !== 201) {
-          const error={errorMessage:resData.errors[0].message}
-          throw Error(JSON.stringify(error));
-        } else {
-          if(resData.data.login.token){
-            console.log(this.context.login(
-              resData.data.login.token,
-              resData.data.login.userId,
-              resData.data.login.tokenExpiration
-            ));
-            // https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
-            //store JWT Token to browser session storage 
-            //If you use localStorage instead of sessionStorage, then this w/persisted across tabs and new windows.
-            //sessionStorage = persisted only in current tab
-            console.log(this.context.login)
-            console.log(this.props)
-            console.log(this.context)
-            let loginObject={
-              token:resData.data.login.token,
-              userId:resData.data.login.userId
+    }).then(res => {
+      return res
+        .json()
+        .then(resData => {
+          if (res.status !== 200 && res.status !== 201) {
+            const error = { errorMessage: resData.errors[0].message };
+            throw Error(JSON.stringify(error));
+          } else {
+            if (resData.data.login.token) {
+              this.context.login(
+                resData.data.login.token,
+                resData.data.login.userId,
+                resData.data.login.tokenExpiration
+              );
             }
-            console.log(loginObject)
-            loginObject=JSON.stringify(loginObject);
-            sessionStorage.setItem('jwtToken', loginObject);
           }
-        }
-      })
-      .catch(err => {
-        // console.log("error interno del servidor");
-        console.log(JSON.parse(err.message));
-      });;
-    })
+        })
+        .catch(err => {
+          // console.log("error interno del servidor");
+          console.log(JSON.parse(err.message));
+        });
+    });
   };
 
   render() {
