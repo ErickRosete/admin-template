@@ -1,11 +1,28 @@
 const { buildSchema } = require("graphql");
-const { blogEntryDef, blogEntryQuery, blogEntryMutation } = require("./blog-entry");
+const {
+  blogEntryDef,
+  blogEntryQuery,
+  blogEntryMutation
+} = require("./blog-entry");
 const { categoryDef, categoryQuery, categoryMutation } = require("./category");
-const { subcategoryDef, subcategoryQuery, subcategoryMutation } = require("./subcategory");
+const {
+  subcategoryDef,
+  subcategoryQuery,
+  subcategoryMutation
+} = require("./subcategory");
 const { productDef, productQuery, productMutation } = require("./product");
 const { addressDef, addressQuery, addressMutation } = require("./address");
 const { userDef, userQuery, userMutation } = require("./user");
-const { shoppingCartDef, shoppingCartQuery, shoppingCartMutation } = require("./shopping-cart");
+const {
+  shoppingCartDef,
+  shoppingCartQuery,
+  shoppingCartMutation
+} = require("./shopping-cart");
+const {
+  shopOrderDef,
+  shopOrderQuery,
+  shopOrderMutation
+} = require("./shop-order");
 
 module.exports = buildSchema(`
     ${blogEntryDef}
@@ -15,6 +32,7 @@ module.exports = buildSchema(`
     ${addressDef}
     ${userDef}
     ${shoppingCartDef}
+    ${shopOrderDef}
 
     type RootQuery {
         ${blogEntryQuery}
@@ -24,6 +42,7 @@ module.exports = buildSchema(`
         ${addressQuery}
         ${userQuery}
         ${shoppingCartQuery}
+        ${shopOrderQuery}
     }
 
     type RootMutation {
@@ -34,6 +53,7 @@ module.exports = buildSchema(`
         ${addressMutation}
         ${userMutation}
         ${shoppingCartMutation}
+        ${shopOrderMutation}
     }
 
     schema {

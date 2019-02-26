@@ -3,6 +3,8 @@ const Product = require("../../models/product");
 const ShoppingCartProduct = require("../../models/shopping-cart-product");
 const Subcategory = require("../../models/subcategory");
 const Address = require("../../models/address");
+const ShopOrderProduct = require("../../models/shop-order-product");
+const ShopOrderAddress = require("../../models/shop-order-address");
 const DataLoader = require("dataloader");
 
 // const { dateToString } = require("../../helpers/date");
@@ -110,6 +112,61 @@ const getSubcategories = async subcategoryIds => {
   }
 };
 
+const shopOrderAddressLoader = new DataLoader(shopOrderAddressIds => {
+  return getShopOrderAddresses(shopOrderAddressIds);
+});
+
+const getShopOrderAddresses = async shopOrderAddressIds => {
+  try {
+    const shopOrderAddresses = await ShopOrderAddress.find({
+      _id: { $in: shopOrderAddressIds }
+    });
+    return shopOrderAddresses.map(shopOrderAddress => {
+      return { ...shopOrderAddress._doc };
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getShopOrderAddress = async shopOrderAddressId => {
+  try {
+    return await shopOrderAddressLoader.load(shopOrderAddressId.toString());
+  } catch (err) {
+    throw err;
+  }
+};
+
+const shopOrderProductLoader = new DataLoader(shopOrderProductIds => {
+  return getShopOrderProducts(shopOrderProductIds);
+});
+
+const getShopOrderProducts = async shopOrderProductIds => {
+  try {
+    const shopOrderProducts = await ShopOrderProduct.find({
+      _id: { $in: shopOrderProductIds }
+    });
+    return shopOrderProducts.map(shopOrderProduct => {
+      return { ...shopOrderProduct._doc };
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+const transformShopOrder = shopOrder => {
+  return {
+    ...shopOrder._doc,
+    user: getUser.bind(this, shopOrder.user),
+    shopOrderAddress: getShopOrderAddress.bind(
+      this,
+      shopOrder.shopOrderAddress
+    ),
+    shopOrderProducts: () =>
+      shopOrderProductLoader.loadMany(shopOrder.shopOrderProducts)
+  };
+};
+
 const transformShoppingCart = shoppingCart => {
   return {
     ...shoppingCart._doc,
@@ -162,3 +219,4 @@ exports.transformCategory = transformCategory;
 exports.transformSubcategory = transformSubcategory;
 exports.transformShoppingCartProduct = transformShoppingCartProduct;
 exports.transformShoppingCart = transformShoppingCart;
+exports.transformShopOrder = transformShopOrder;
