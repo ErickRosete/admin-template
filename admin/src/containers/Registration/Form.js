@@ -5,6 +5,8 @@ import styles from "./styles";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
+import Select from 'react-select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 
 export class Form extends Component {
@@ -14,7 +16,8 @@ export class Form extends Component {
             name: 'nombre',
             email:"email",
             password:"password",
-            birthdate:"fecha de cumpleanos"
+            birthdate:"fecha de cumpleanos",
+            role:""
             };
     }
     
@@ -27,13 +30,6 @@ export class Form extends Component {
         this.props.onSubmit(usuario)
     };
     changeNameHandler= data => {
-        // event.preventDefault();
-        // console.log("clicked")
-        // let usuario={...this.state}
-        // console.log(usuario)
-        // console.log(this.props.onSubmit)
-        // this.props.onSubmit(usuario)
-        // console.log(data.target.value)
         this.setState({
             name:data.target.value
         })
@@ -43,7 +39,17 @@ export class Form extends Component {
             email:data.target.value
         })
     }
+    
+    changeRolesHandler=(options)=>{
+        console.log(options)
+        this.setState({
+            role:options
+        });   
+    }
       render() {
+        console.log(this.state)
+        console.log(this.state.role)
+        const roles=[{ value: "Admin", label:"Admin"  },{ value: "Editor", label:"Editor"  },{ value: "Customer", label:"Customer"  }]
         return (
             <div>
                 <div>
@@ -116,6 +122,19 @@ export class Form extends Component {
                                 }}
                                 value={this.state.birthdate}
                             />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <div style={{ marginTop: '16px', marginBottom: '8px' }}>
+                                <InputLabel shrink htmlFor="roles">Roles</InputLabel>
+                                <Select
+                                    id="roles"
+                                    value={this.state.role}
+                                    onChange={this.changeRolesHandler}
+                                    options={roles}
+                                    placeholder="Selecciona un rol..."
+                                    // isMulti
+                                />
+                            </div>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Button type="submit" variant="contained" color="primary" autoFocus>

@@ -6,6 +6,7 @@ import Layout from "../../containers/Layout/Layout";
 import Form from "../../containers/Registration/Form";
 import { ADD_USER } from "./constants";
 import Snackbar from "@material-ui/core/Snackbar";
+
 // import {main} from "./mail";
 
 const styles = theme => ({
@@ -54,6 +55,7 @@ export class RegisterPage extends Component {
               address=""
               onSubmit={usuario => {
                 console.log("creando usuario");
+                usuario.role=usuario.role.value
                 console.log(usuario);
                 createUser({
                   variables: { ...usuario }
@@ -86,32 +88,6 @@ export class RegisterPage extends Component {
                       .then(resData => {
                         console.log(resData);
                       });
-                    // fetch(`http://localhost:5000/sometrial`, {
-                    //   method: "POST",
-                    //   // body: formData
-                    //   headers: {
-                    //     'Accept': 'application/json',
-                    //     'Content-Type': 'application/json',
-                    //   },
-                    //   body: JSON.stringify({
-                    //     firstParam: 'yourValue',
-                    //     secondParam: 'yourOtherValue',
-                    //   })
-                    // })
-                    // .then(res => {
-                    //   if (res.status !== 200 && res.status !== 201) {
-                    //     throw new Error("Failed!");
-                    //   }
-                    //   return res.json();
-                    // })
-                    // .then(resData => {
-                    //   this.setState({ uploadingImages: false, imageLinks: resData });
-                    //   console.log(resData);
-                    // })
-                    // .catch(err => {
-                    //   this.setState({ uploadingImages: false });
-                    //   console.log(err);
-                    // });
                   })
                   .catch(error => {
                     console.log("mi error");
@@ -128,8 +104,6 @@ export class RegisterPage extends Component {
                           message: "Usuario ya existente",
                           open: true
                         });
-                        // console.log(main)
-                        // main("hello world magico")
                       }
                     }
                   });

@@ -191,12 +191,15 @@ const transformProduct = product => {
 };
 
 const transformUser = user => {
-  return {
-    ...user._doc,
+  let res={...user._doc,
     password: null,
     address: getAddress.bind(this, user.address),
-    addresses: () => addressLoader.loadMany(user._doc.addreses)
-  };
+  }
+  if(user._doc.addresses.length>0){
+    res.addresses= () => addressLoader.loadMany(user._doc.addreses)
+  }
+  else{res.addresses=null}
+  return res
 };
 
 const transformCategory = category => {

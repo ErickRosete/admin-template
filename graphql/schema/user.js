@@ -5,6 +5,7 @@ const userDef = `
         email: String!
         password: String!
         birthdate: String!
+        role: String!
         mainAddress: Address
         addresses: [Address]
     }
@@ -14,6 +15,7 @@ const userDef = `
         email: String
         password: String
         birthdate: String
+        role: String
         mainAddress: AddressInput
         addresses: [ID]
     }
@@ -21,7 +23,8 @@ const userDef = `
     type AuthData {
         userId: ID!
         token: String!
-        tokenExpiration: Int!
+        tokenExpiration: String!
+        role: String!
     }
 `;
 

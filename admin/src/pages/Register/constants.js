@@ -8,6 +8,7 @@ mutation MIMUTACION(
   $birthdate: String
   $mainAddress: AddressInput
   $addresses: [ID]
+  $role: String
   ) 
   {
     createUser(
@@ -15,6 +16,7 @@ mutation MIMUTACION(
         name: $name
         email: $email
         password: $password
+        role:$role
         birthdate: $birthdate
         mainAddress: $mainAddress
         addresses: $addresses

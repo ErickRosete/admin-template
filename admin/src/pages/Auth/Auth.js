@@ -41,6 +41,7 @@ class AuthPage extends Component {
             userId
             token
             tokenExpiration
+            role
           }
         }
         `
@@ -61,10 +62,12 @@ class AuthPage extends Component {
             throw Error(JSON.stringify(error));
           } else {
             if (resData.data.login.token) {
+              // console.log(resData.data)
               this.context.login(
                 resData.data.login.token,
                 resData.data.login.userId,
-                resData.data.login.tokenExpiration
+                resData.data.login.tokenExpiration,
+                resData.data.login.role
               );
             }
           }

@@ -76,7 +76,7 @@ module.exports = {
 
     login: async args => {
         const user = await User.findOne({ email: args.userInput.email });
-        // console.log(user)
+        console.log(user)
         if (!user) {
           throw new Error("Invalid Credentials");
         }
@@ -88,15 +88,18 @@ module.exports = {
         if (!isEqual) {
           throw new Error("Invalid Credentials");
         }
+        const expiresIn="2h"
         const token = jwt.sign(
           { userId: user.id, email: user.email },
           "asecretkeynotknownbyanyone",
-          { expiresIn: "2h" }
+          { expiresIn}
         );
+        console.log(user.role)
         return {
           userId: user.id,
           token: token,
-          tokenExpiration: 2
+          tokenExpiration: expiresIn,
+          role: user.role
         };
     },
 

@@ -17,6 +17,7 @@ import NewsletterPage from "./pages/Newsletter/Newsletter";
 import ProductPage from "./pages/Product/Product";
 import ProductFormPage from "./pages/Product/Form/ProductForm";
 import AddressPage from "./pages/Address/Address";
+import AddressesPage from "./pages/Address/Addresses";
 import RegisterPage from "./pages/Register/register";
 import AddressFormPage from "./pages/Address/Form/AddressForm";
 import ResetPage from "./pages/Reset/reset";
@@ -48,19 +49,25 @@ class App extends Component {
     }
   }
 
-  login = (token, userId, tokenExpiration) => {
+  login = (token, userId, tokenExpiration,role) => {
+
     // https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
     //If you use localStorage instead of sessionStorage, then this will persist across tabs and new windows.
     //sessionStorage = persists only in current tab
     // https://stackoverflow.com/questions/15171711/expiry-of-sessionstorage
+    console.log(`tokenExpiration: ${tokenExpiration}`)
+    console.log(`role: ${role}`)
+
     let authObject = {
       token,
       userId
     };
-    this.setState(authObject);
 
-    authObject = JSON.stringify(authObject);
-    localStorage.setItem("jwtToken", authObject);
+    if(role==="Admin"){
+      this.setState(authObject);
+      authObject = JSON.stringify(authObject);
+      localStorage.setItem("jwtToken", authObject);
+    }
   };
 
   logout = () => {
@@ -133,6 +140,9 @@ class App extends Component {
                 )}
                 {this.state.token && (
                   <Route path="/address" component={AddressPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/profile/:id/addresses" component={AddressesPage} />
                 )}
                 {this.state.token && (
                   <Route path="/profile/:id" component={ProfilePage} />
