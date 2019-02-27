@@ -94,7 +94,7 @@ export class Form extends Component {
     formData.append("name", image.name);
 
     // headers: { "Content-Type": "multipart/form-data" },
-    fetch(`http://localhost:5000/uploadImage`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/uploadImage`, {
       method: "POST",
       body: formData
     })

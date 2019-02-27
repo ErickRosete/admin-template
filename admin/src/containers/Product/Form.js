@@ -112,7 +112,7 @@ export class Form extends Component {
     });
 
     // headers: { "Content-Type": "multipart/form-data" },
-    fetch(`http://localhost:5000/uploadImages`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/uploadImages`, {
       method: "POST",
       body: formData
     })
