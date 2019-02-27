@@ -192,12 +192,15 @@ const transformProduct = product => {
 };
 
 const transformUser = user => {
+  console.log("transforming user")
+  console.log(user._doc.addresses)
   let res={...user._doc,
     password: null,
     address: getAddress.bind(this, user.address),
   }
   if(user._doc.addresses.length>0){
-    res.addresses= () => addressLoader.loadMany(user._doc.addreses)
+    console.log("caso mayor a 0")
+    res.addresses= () => addressLoader.loadMany(user._doc.addresses)
   }
   else{res.addresses=null}
   return res

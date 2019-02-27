@@ -133,6 +133,24 @@ module.exports = {
             throw err;
         }
     },
+    addAddress:async(args,req)=>{
+        console.log("args")
+        console.log(args)
+        try {
+            const userInDB = await User.findById(args.userId);
+            // console.log(userInDB.addresses)
+            userInDB.addresses.push(args.addressId)
+            // console.log(userInDB.addresses)
+            // return {...userInDB._doc}
+            const result = await userInDB.save();
+            console.log(result)
+            return transformUser(result);
+        // return transformProduct(product);
+        } catch (err) {
+        console.log(err)
+        throw err;
+        }
+    },
     updateUserPassword:async(args,req)=>{
         console.log(args)
         try {

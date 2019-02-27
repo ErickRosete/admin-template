@@ -37,6 +37,7 @@ const userQuery = `
 `;
 
 const userMutation = `
+    addAddress(userId:ID!,addressId:ID!): User
     createUser(userInput: UserInput!): User
     updateUser(id: ID!,userInput: UserInput): User
     updateUserPassword(id: ID!,password: String): User

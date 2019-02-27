@@ -66,6 +66,17 @@ export const ADD_ADDRESS = gql`
         }
     }
 `;
+
+export const ADD_ADDRESS_TO_USER=gql `
+  mutation addAddressDiferente($userId:ID!,$addressId:ID!){
+    addAddress(userId: $userId, addressId: $addressId){
+      _id
+      addresses{
+        _id
+      }
+    }
+  }
+`
 // createAddress(addressInput: AddressInput): Address
 // input AddressInput{
 //   street: String
