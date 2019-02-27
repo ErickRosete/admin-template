@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Hidden from "@material-ui/core/Hidden";
 import EventIcon from "@material-ui/icons/Event";
+import ShopOrderIcon from "@material-ui/icons/ShoppingBasket"
 import { NavLink } from "react-router-dom";
 // import logo from "../../assets/images/logos/logo.png";
 
@@ -55,13 +56,14 @@ const styles = theme => ({
 
 const ResponsiveDrawer = props => {
   const sideLinks = [
-    { id: 1, icon: <EventIcon />, text: "Blog", linkTo: "/blog" },
-    { id: 2, icon: <EventIcon />, text: "Newsletter", linkTo: "/newsletter" },
-    { id: 3, icon: <EventIcon />, text: "Categorias", linkTo: "/category" },
-    { id: 4, icon: <EventIcon />, text: "Subcategorias", linkTo: "/subcategory" },
-    { id: 5, icon: <EventIcon />, text: "Productos", linkTo: "/product" },
-    { id: 6, icon: <Place />, text: "Direcciones", linkTo: "/address" },
-    { id: 7, icon: <PersonAdd />, text: "Registro", linkTo: "/register" }
+    { id: 1, icon: <ShopOrderIcon />, text: "Ordenes de Compra", linkTo: "/shopOrders" },
+    { id: 2, icon: <EventIcon />, text: "Blog", linkTo: "/blog" },
+    { id: 3, icon: <EventIcon />, text: "Newsletter", linkTo: "/newsletter" },
+    { id: 4, icon: <EventIcon />, text: "Categorias", linkTo: "/category" },
+    { id: 5, icon: <EventIcon />, text: "Subcategorias", linkTo: "/subcategory" },
+    { id: 6, icon: <EventIcon />, text: "Productos", linkTo: "/product" },
+    { id: 7, icon: <Place />, text: "Direcciones", linkTo: "/address" },
+    { id: 8, icon: <PersonAdd />, text: "Registro", linkTo: "/register" }
   ];
 
   const { classes, theme } = props;

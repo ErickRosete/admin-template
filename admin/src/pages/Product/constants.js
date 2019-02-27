@@ -25,6 +25,7 @@ export const GET_PRODUCTS = gql`
       price
       imageLinks
       shortDescription
+      description
     }
   }
 `;
@@ -81,9 +82,8 @@ export const EDIT_PRODUCT = gql`
         description: $description
         subcategories: $subcategories
       }
-    )      
-    {
-       _id
+    ) {
+      _id
       name
       price
       imageLinks

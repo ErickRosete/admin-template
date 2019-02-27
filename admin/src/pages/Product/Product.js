@@ -9,6 +9,12 @@ import Spinner from "../../components/Spinner/Spinner";
 import { DELETE_PRODUCT, GET_PRODUCTS } from "./constants";
 
 import CardList from "../../components/Product/CardList/CardList";
+import TextField from "@material-ui/core/TextField";
+import SearchIcon from "@material-ui/icons/Search";
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+
+import Pagination from "rc-pagination";
+import "rc-pagination/assets/index.css";
 
 //Buttons
 import Fab from "@material-ui/core/Fab";
@@ -24,7 +30,8 @@ const styles = theme => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    alignContent: "center"
+    alignContent: "center",
+    flexDirection: "column"
   },
   fab: {
     position: "fixed",
@@ -36,7 +43,9 @@ const styles = theme => ({
 export class ProductPage extends Component {
   state = {
     openDialog: false,
-    selectedId: null
+    selectedId: null,
+    filter: "",
+    currentPage: 1
   };
 
   handleClickOpenDeleteDialog = id => {
@@ -50,20 +59,77 @@ export class ProductPage extends Component {
     this.setState({ openDialog: false });
   };
 
+  handleFilterChange = event => {
+    this.setState({ filter: event.target.value });
+  };
+
+  handleChangePage = page => {
+    this.setState({
+      currentPage: page
+    });
+  };
+
   render() {
+    const itemsPerPage = 10;
     const { classes } = this.props;
     return (
       <Layout title="Lista de productos">
         <div className={classes.product}>
+          <TextField
+            autoFocus
+            margin="normal"
+            label="Busqueda"
+            type="text"
+            value={this.state.filter}
+            onChange={this.handleFilterChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
+          />
+
           <Query query={GET_PRODUCTS}>
             {({ loading, error, data }) => {
               if (loading) return <Spinner />;
               if (error) return <p>Error :( recarga la pagina!</p>;
+
+              let filteredProducts = data.products;
+
+              if (this.state.filter) {
+                const filter = this.state.filter.toUpperCase();
+                filteredProducts = data.products.filter(
+                  product =>
+                    product.name.toUpperCase().includes(filter) ||
+                    product.price.toString().includes(filter) ||
+                    product.shortDescription.toUpperCase().includes(filter) ||
+                    product.description.toUpperCase().includes(filter)
+                );
+              }
+
+              //pagination logic
+              const first = (this.state.currentPage - 1) * itemsPerPage;
+              const lastAux = this.state.currentPage * itemsPerPage;
+              const last =
+                lastAux > filteredProducts.length
+                  ? filteredProducts.length
+                  : lastAux;
+
               return (
-                <CardList
-                  products={data.products}
-                  openDeleteDialog={this.handleClickOpenDeleteDialog}
-                />
+                <React.Fragment>
+                  <CardList
+                    products={filteredProducts.slice(first, last)}
+                    openDeleteDialog={this.handleClickOpenDeleteDialog}
+                  />
+                  <Pagination
+                    onChange={this.handleChangePage}
+                    current={this.state.currentPage}
+                    total={filteredProducts.length}
+                    defaultPageSize={itemsPerPage}
+                  />
+                </React.Fragment>
               );
             }}
           </Query>

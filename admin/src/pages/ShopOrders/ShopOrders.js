@@ -7,16 +7,22 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 import Spinner from "../../components/Spinner/Spinner";
-import Table from "../../components/Subcategory/Table";
+import Table from "../../components/ShopOrders/Table";
+import DetailsDialog from "../../components/ShopOrders/DetailsDialog";
 
 //graphql
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import { GET_SHOP_ORDERS } from "./constants";
 
-export class ShopOrderPage extends Component {
+export class ShopOrdersPage extends Component {
   state = {
     openDetailsDialog: false,
-    selectedShopOrder: { _id: "" }
+    selectedShopOrder: {
+      _id: "",
+      shopOrderAddress: {},
+      user: {},
+      shopOrderProducts: [{ _id: "" }]
+    }
   };
 
   handleOpenDetailsDialog = shopOrder => {
@@ -58,7 +64,7 @@ export class ShopOrderPage extends Component {
           <DetailsDialog
             shopOrder={this.state.selectedShopOrder}
             open={this.state.openDetailsDialog}
-            onConfirm={this.handleCloseDetailsDialog}
+            onClose={this.handleCloseDetailsDialog}
           />
         </div>
       </Layout>
@@ -66,8 +72,8 @@ export class ShopOrderPage extends Component {
   }
 }
 
-ShopOrderPage.propTypes = {
+ShopOrdersPage.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ShopOrderPage);
+export default withStyles(styles)(ShopOrdersPage);

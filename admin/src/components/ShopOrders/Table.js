@@ -51,9 +51,6 @@ const SubcategoryTable = props => {
               <TableCell component="th" scope="row">
                 {shopOrder.user.email}
               </TableCell>
-              <TableCell component="th" scope="row">
-                {shopOrder.user.email}
-              </TableCell>
               <TableCell align="right">
                 <Button
                   variant="contained"
