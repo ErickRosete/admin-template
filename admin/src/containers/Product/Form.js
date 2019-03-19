@@ -247,16 +247,16 @@ export class Form extends Component {
                   {this.state.uploadingImage ? (
                     <Spinner />
                   ) : (
-                    this.state.imageLinks.map(imageLink => (
-                      <img
-                        height={100}
-                        key={imageLink}
-                        className={classes.img}
-                        src={imageLink}
-                        alt="producto"
-                      />
-                    ))
-                  )}
+                      this.state.imageLinks.map(imageLink => (
+                        <img
+                          height={100}
+                          key={imageLink}
+                          className={classes.img}
+                          src={imageLink}
+                          alt="producto"
+                        />
+                      ))
+                    )}
                 </div>
               )}
             </div>
@@ -310,7 +310,7 @@ export class Form extends Component {
                 required
                 error={!this.state.editorState.getCurrentContent().hasText()}
               >
-                Contenido del blog
+                Características del producto
               </FormLabel>
               <Editor
                 editorState={this.state.editorState}

@@ -163,7 +163,9 @@ const transformShopOrder = shopOrder => {
       shopOrder.shopOrderAddress
     ),
     shopOrderProducts: () =>
-      shopOrderProductLoader.loadMany(shopOrder.shopOrderProducts),
+      shopOrderProductLoader.loadMany(
+        shopOrder.shopOrderProducts.map(product => product.toString())
+      ),
     createdAt: dateToString(shopOrder.createdAt)
   };
 };
@@ -173,7 +175,9 @@ const transformShoppingCart = shoppingCart => {
     ...shoppingCart._doc,
     user: getUser.bind(this, shoppingCart.user),
     shoppingCartProducts: () =>
-      shoppingCartProductLoader.loadMany(shoppingCart._doc.shoppingCartProducts)
+      shoppingCartProductLoader.loadMany(
+        shoppingCart.shoppingCartProducts.map(product => product.toString())
+      )
   };
 };
 
@@ -187,36 +191,45 @@ const transformShoppingCartProduct = shoppingCartProduct => {
 const transformProduct = product => {
   return {
     ...product._doc,
-    subcategories: () => subcategoryLoader.loadMany(product._doc.subcategories)
+    subcategories: () => subcategoryLoader.loadMany(
+      product.subcategories.map(subcategory.toString())
+    )
   };
 };
 
 const transformUser = user => {
   console.log("transforming user")
   console.log(user._doc.addresses)
-  let res={...user._doc,
+  let res = {
+    ...user._doc,
     password: null,
     address: getAddress.bind(this, user.address),
   }
-  if(user._doc.addresses.length>0){
+  if (user._doc.addresses.length > 0) {
     console.log("caso mayor a 0")
-    res.addresses= () => addressLoader.loadMany(user._doc.addresses)
+    res.addresses = () => addressLoader.loadMany(
+      user.addresses.map(address => address.toString())
+    )
   }
-  else{res.addresses=null}
+  else { res.addresses = null }
   return res
 };
 
 const transformCategory = category => {
   return {
     ...category._doc,
-    subcategories: () => subcategoryLoader.loadMany(category._doc.subcategories)
+    subcategories: () => subcategoryLoader.loadMany(
+      category.subcategories.map(subcategory => subcategory.toString())
+    )
   };
 };
 
 const transformSubcategory = subcategory => {
   return {
     ...subcategory._doc,
-    products: () => productLoader.loadMany(subcategory._doc.products)
+    products: () => productLoader.loadMany(
+      subcategory.products.map(product => product.toString())
+    )
   };
 };
 

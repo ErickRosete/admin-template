@@ -56,6 +56,7 @@ export const ADD_PRODUCT = gql`
       price
       imageLinks
       shortDescription
+      description
     }
   }
 `;

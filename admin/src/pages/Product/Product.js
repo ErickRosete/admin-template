@@ -70,7 +70,7 @@ export class ProductPage extends Component {
   };
 
   render() {
-    const itemsPerPage = 10;
+    const itemsPerPage = 9;
     const { classes } = this.props;
     return (
       <Layout title="Lista de productos">
@@ -96,7 +96,7 @@ export class ProductPage extends Component {
               if (loading) return <Spinner />;
               if (error) return <p>Error :( recarga la pagina!</p>;
 
-              let filteredProducts = data.products;
+              let filteredProducts = data.products ? data.products : [];
 
               if (this.state.filter) {
                 const filter = this.state.filter.toUpperCase();
